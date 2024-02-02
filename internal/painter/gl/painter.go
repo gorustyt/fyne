@@ -140,16 +140,7 @@ func (p *painter) compileShader(source string, shaderType uint32) (Shader, error
 
 	return shader, nil
 }
-
-func (p *painter) createProgram(shaderFilename string) Program {
-	// Why a switch over a filename?
-	// Because this allows for a minimal change, once we reach Go 1.16 and use go:embed instead of
-	// fyne bundle.
-	vertexSrc, fragmentSrc := shaderSourceNamed(shaderFilename)
-	if vertexSrc == nil {
-		panic("shader not found: " + shaderFilename)
-	}
-
+func (p *painter) createProgramWithShader(vertexSrc, fragmentSrc []byte) Program {
 	vertShader, err := p.compileShader(string(vertexSrc), vertexShader)
 	if err != nil {
 		panic(err)
@@ -180,6 +171,18 @@ func (p *painter) createProgram(shaderFilename string) Program {
 	}
 
 	return prog
+}
+
+func (p *painter) createProgram(shaderFilename string) Program {
+	// Why a switch over a filename?
+	// Because this allows for a minimal change, once we reach Go 1.16 and use go:embed instead of
+	// fyne bundle.
+	vertexSrc, fragmentSrc := shaderSourceNamed(shaderFilename)
+	if vertexSrc == nil {
+		panic("shader not found: " + shaderFilename)
+	}
+
+	return p.createProgramWithShader(vertexSrc, fragmentSrc)
 }
 
 func (p *painter) logError() {

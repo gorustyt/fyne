@@ -1,6 +1,9 @@
 package gl
 
-import "github.com/go-gl/mathgl/mgl32"
+import (
+	"github.com/go-gl/mathgl/mgl32"
+	"image"
+)
 
 type context interface {
 	ActiveTexture(textureUnit uint32)
@@ -39,6 +42,7 @@ type context interface {
 	TexParameteri(target, param uint32, value int32)
 	Uniform1f(uniform Uniform, v float32)
 	Uniform2f(uniform Uniform, v0, v1 float32)
+	Uniform3f(uniform Uniform, vec3 mgl32.Vec3)
 	Uniform4f(uniform Uniform, v0, v1, v2, v3 float32)
 	UseProgram(program Program)
 	VertexAttribPointerWithOffset(attribute Attribute, size int, typ uint32, normalized bool, stride, offset int)
@@ -46,4 +50,11 @@ type context interface {
 
 	UniformMatrix4fv(program Program, name string, mat4 mgl32.Mat4)
 	Uniform1i(program Program, name string, v0 int32)
+	DisableDepthTest()
+	EnableDepthTest()
+
+	DrawElementsArrays(mode uint32, index []uint32)
+	MakeTexture(img image.Image, index uint32) Texture
+	MakeVao(points []float32) Buffer
+	MakeVaoWithEbo(points []float32, index []uint32) Buffer
 }

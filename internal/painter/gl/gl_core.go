@@ -5,6 +5,8 @@ package gl
 
 import (
 	"github.com/go-gl/mathgl/mgl32"
+	"image"
+	"image/draw"
 	"strings"
 
 	"github.com/go-gl/gl/v4.2-core/gl"
@@ -155,6 +157,10 @@ func (c *coreContext) Disable(capability uint32) {
 	gl.Disable(capability)
 }
 
+func (c *coreContext) DrawElementsArrays(mode uint32, index []uint32) {
+	gl.DrawElements(mode, int32(len(index)), gl.UNSIGNED_INT, gl.Ptr(index))
+}
+
 func (c *coreContext) DrawArrays(mode uint32, first, count int) {
 	gl.DrawArrays(mode, int32(first), int32(count))
 }
@@ -254,6 +260,9 @@ func (c *coreContext) Uniform1f(uniform Uniform, v float32) {
 func (c *coreContext) Uniform2f(uniform Uniform, v0, v1 float32) {
 	gl.Uniform2f(int32(uniform), v0, v1)
 }
+func (c *coreContext) Uniform3f(uniform Uniform, v mgl32.Vec3) {
+	gl.Uniform3f(int32(uniform), v[0], v[1], v[2])
+}
 
 func (c *coreContext) Uniform4f(uniform Uniform, v0, v1, v2, v3 float32) {
 	gl.Uniform4f(int32(uniform), v0, v1, v2, v3)
@@ -274,6 +283,101 @@ func (c *coreContext) Viewport(x, y, width, height int) {
 func (c *coreContext) UniformMatrix4fv(program Program, name string, mat4 mgl32.Mat4) {
 	gl.UniformMatrix4fv(int32(c.GetUniformLocation(program, name)), 1, false, &mat4[0])
 }
+
 func (c *coreContext) Uniform1i(program Program, name string, v0 int32) {
 	gl.Uniform1i(int32(c.GetUniformLocation(program, name)), v0)
+}
+
+func (c *coreContext) EnableDepthTest() {
+	gl.Enable(gl.DEPTH_TEST)
+	gl.DepthFunc(gl.LESS)
+}
+
+func (c *coreContext) DisableDepthTest() {
+	gl.Disable(gl.DEPTH_TEST)
+}
+
+func (c *coreContext) MakeVaoWithEbo(points []float32, indexs []uint32) Buffer {
+	c.CreateBuffer()
+	c.BufferData(gl.ARRAY_BUFFER, points, gl.STATIC_DRAW)
+
+	var ebo uint32
+	gl.GenBuffers(1, &ebo)
+	gl.BindBuffer(gl.ELEMENT_ARRAY_BUFFER, ebo)
+	gl.BufferData(gl.ELEMENT_ARRAY_BUFFER, 4*len(indexs), gl.Ptr(indexs), gl.STATIC_DRAW)
+
+	var vao uint32
+	gl.GenVertexArrays(1, &vao)
+	gl.BindVertexArray(vao)
+	return Buffer(ebo)
+}
+
+func (c *coreContext) MakeVao(points []float32) Buffer {
+	var vbo uint32
+
+	// 在显卡中开辟一块空间，创建顶点缓存对象，个数为1，变量vbo会被赋予一个ID值。
+	gl.GenBuffers(1, &vbo)
+
+	// 将 vbo 赋值给 gl.ARRAY_BUFFER，要知道这个对象会被赋予不同的vbo，因此其值是变化的
+	// 可选类型：GL_ARRAY_BUFFER, GL_ELEMENT_ARRAY_BUFFER, GL_PIXEL_PACK_BUFFER, GL_PIXEL_UNPACK_BUFFER
+	gl.BindBuffer(gl.ARRAY_BUFFER, vbo)
+	// 将内存中的数据传递到显卡中的gl.ARRAY_BUFFER对象上，其实是把数据传递到绑定在其上面的vbo对象上。
+	// 4*len(points) 代表总的字节数，因为是32位的
+	gl.BufferData(gl.ARRAY_BUFFER, 4*len(points), gl.Ptr(points), gl.STATIC_DRAW)
+
+	var vao uint32
+	// 创建顶点数组对象，个数为1，变量vao会被赋予一个ID值。
+	gl.GenVertexArrays(1, &vao)
+	// 后面的两个函数都是要操作具体的vao的，因此需要先将vao绑定到opengl上。
+	// 解绑：gl.BindVertexArray(0)，opengl中很多的解绑操作都是传入0
+	gl.BindVertexArray(vao)
+	return Buffer(vbo)
+}
+
+func (c *coreContext) MakeTexture(img image.Image, index uint32) Texture {
+	rgba := image.NewRGBA(img.Bounds())
+	if rgba.Stride != rgba.Rect.Size().X*4 {
+		panic("unsupported stride")
+	}
+
+	draw.Draw(rgba, rgba.Bounds(), img, image.Point{0, 0}, draw.Src)
+	var te uint32
+	gl.GenTextures(1, &te)
+	gl.ActiveTexture(index)
+	gl.BindTexture(gl.TEXTURE_2D, te)
+	gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT)
+	gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT)
+	gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST)
+	gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST)
+	gl.TexImage2D(gl.TEXTURE_2D, 0, gl.RGBA, int32(rgba.Rect.Size().X), int32(rgba.Rect.Size().Y), 0, gl.RGBA, gl.UNSIGNED_BYTE, gl.Ptr(rgba.Pix))
+	gl.GenerateMipmap(gl.TEXTURE_2D)
+	return Texture(te)
+}
+
+func GetTextureByIndex(index int) uint32 {
+	switch index {
+	case 0:
+		return gl.TEXTURE0
+	case 1:
+		return gl.TEXTURE1
+	case 2:
+		return gl.TEXTURE2
+	case 3:
+		return gl.TEXTURE3
+	case 4:
+		return gl.TEXTURE4
+	case 5:
+		return gl.TEXTURE5
+	case 6:
+		return gl.TEXTURE6
+	case 7:
+		return gl.TEXTURE7
+	case 8:
+		return gl.TEXTURE8
+	case 9:
+		return gl.TEXTURE9
+	case 10:
+		return gl.TEXTURE10
+	}
+	return 0
 }

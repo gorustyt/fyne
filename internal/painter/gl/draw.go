@@ -85,6 +85,29 @@ func (p *painter) drawObject(o fyne.CanvasObject, pos fyne.Position, frame fyne.
 		p.drawGradient(obj, p.newGlLinearGradientTexture, pos, frame)
 	case *canvas.RadialGradient:
 		p.drawGradient(obj, p.newGlRadialGradientTexture, pos, frame)
+	case *Canvas3dObj:
+		p.drawCustomObj(obj, pos, frame)
+	}
+}
+
+func (p *painter) drawCustomObj(obj *Canvas3dObj, pos fyne.Position, frame fyne.Size) {
+	if obj.Painter == nil {
+		pa := NewPainter3D(p.ctx)
+		obj.Painter = pa
+		pa.prog = p.createProgramWithShader([]byte(obj.vertStr), []byte(obj.fragStr))
+	}
+	p.ctx.UseProgram(obj.Painter.prog)
+	for _, v := range obj.objs {
+		v.Init(obj.Painter)
+	}
+	for _, v := range obj.objs {
+		v.Apply(obj.Painter)
+	}
+	for _, v := range obj.objs {
+		v.Draw(obj.Painter, pos, frame)
+	}
+	for i := len(obj.objs) - 1; i >= 0; i-- {
+		obj.objs[i].After(obj.Painter)
 	}
 }
 
