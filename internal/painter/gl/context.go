@@ -1,5 +1,7 @@
 package gl
 
+import "github.com/go-gl/mathgl/mgl32"
+
 type context interface {
 	ActiveTexture(textureUnit uint32)
 	AttachShader(program Program, shader Shader)
@@ -41,4 +43,7 @@ type context interface {
 	UseProgram(program Program)
 	VertexAttribPointerWithOffset(attribute Attribute, size int, typ uint32, normalized bool, stride, offset int)
 	Viewport(x, y, width, height int)
+
+	UniformMatrix4fv(program Program, name string, mat4 mgl32.Mat4)
+	Uniform1i(program Program, name string, v0 int32)
 }

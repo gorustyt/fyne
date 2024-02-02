@@ -4,9 +4,10 @@
 package gl
 
 import (
+	"github.com/go-gl/mathgl/mgl32"
 	"strings"
 
-	"github.com/go-gl/gl/v2.1/gl"
+	"github.com/go-gl/gl/v4.2-core/gl"
 
 	"fyne.io/fyne/v2"
 )
@@ -268,4 +269,11 @@ func (c *coreContext) VertexAttribPointerWithOffset(attribute Attribute, size in
 
 func (c *coreContext) Viewport(x, y, width, height int) {
 	gl.Viewport(int32(x), int32(y), int32(width), int32(height))
+}
+
+func (c *coreContext) UniformMatrix4fv(program Program, name string, mat4 mgl32.Mat4) {
+	gl.UniformMatrix4fv(int32(c.GetUniformLocation(program, name)), 1, false, &mat4[0])
+}
+func (c *coreContext) Uniform1i(program Program, name string, v0 int32) {
+	gl.Uniform1i(int32(c.GetUniformLocation(program, name)), v0)
 }
