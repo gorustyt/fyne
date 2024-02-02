@@ -3,7 +3,7 @@
 
 package glfw
 
-import "fyne.io/fyne/v2"
+import "github.com/gorustyt/fyne/v2"
 
 func hasNativeMenu() bool {
 	return false

@@ -7,15 +7,15 @@ import (
 	"sync"
 	"unicode"
 
-	"fyne.io/fyne/v2"
-	"fyne.io/fyne/v2/canvas"
-	"fyne.io/fyne/v2/internal/cache"
-	paint "fyne.io/fyne/v2/internal/painter"
-	"fyne.io/fyne/v2/internal/widget"
-	"fyne.io/fyne/v2/layout"
-	"fyne.io/fyne/v2/theme"
 	"github.com/go-text/typesetting/di"
 	"github.com/go-text/typesetting/shaping"
+	"github.com/gorustyt/fyne/v2"
+	"github.com/gorustyt/fyne/v2/canvas"
+	"github.com/gorustyt/fyne/v2/internal/cache"
+	paint "github.com/gorustyt/fyne/v2/internal/painter"
+	"github.com/gorustyt/fyne/v2/internal/widget"
+	"github.com/gorustyt/fyne/v2/layout"
+	"github.com/gorustyt/fyne/v2/theme"
 	"golang.org/x/image/math/fixed"
 )
 

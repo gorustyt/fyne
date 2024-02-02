@@ -671,7 +671,7 @@ M2 device which allowed us to complete the marked (*) issues.
 
 These changes may break some apps, please read the 
 [upgrading doc](https://developer.fyne.io/api/v2.0/upgrading) for more info
-The import path is now `fyne.io/fyne/v2` when you are ready to make the update.
+The import path is now `github.com/gorustyt/fyne/v2` when you are ready to make the update.
 
 * Coordinate system to float32
   * Size and Position units were changed from int to float32

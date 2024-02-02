@@ -5,8 +5,8 @@
 package app
 
 import (
-	"fyne.io/fyne/v2"
-	"fyne.io/fyne/v2/internal/driver/mobile"
+	"github.com/gorustyt/fyne/v2"
+	"github.com/gorustyt/fyne/v2/internal/driver/mobile"
 )
 
 var systemTheme fyne.ThemeVariant

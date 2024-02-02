@@ -5,11 +5,11 @@ import (
 	"runtime"
 	"testing"
 
-	intRepo "fyne.io/fyne/v2/internal/repository"
-	"fyne.io/fyne/v2/storage"
-	"fyne.io/fyne/v2/storage/repository"
+	intRepo "github.com/gorustyt/fyne/v2/internal/repository"
+	"github.com/gorustyt/fyne/v2/storage"
+	"github.com/gorustyt/fyne/v2/storage/repository"
 
-	_ "fyne.io/fyne/v2/test"
+	_ "github.com/gorustyt/fyne/v2/test"
 
 	"github.com/stretchr/testify/assert"
 )

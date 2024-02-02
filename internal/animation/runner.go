@@ -4,7 +4,7 @@ import (
 	"sync"
 	"time"
 
-	"fyne.io/fyne/v2"
+	"github.com/gorustyt/fyne/v2"
 )
 
 // Runner is the main driver for animations package

@@ -4,11 +4,11 @@ import (
 	"image/color"
 	"testing"
 
-	"fyne.io/fyne/v2"
-	"fyne.io/fyne/v2/canvas"
-	"fyne.io/fyne/v2/container"
-	"fyne.io/fyne/v2/layout"
-	"fyne.io/fyne/v2/theme"
+	"github.com/gorustyt/fyne/v2"
+	"github.com/gorustyt/fyne/v2/canvas"
+	"github.com/gorustyt/fyne/v2/container"
+	"github.com/gorustyt/fyne/v2/layout"
+	"github.com/gorustyt/fyne/v2/theme"
 
 	"github.com/stretchr/testify/assert"
 )

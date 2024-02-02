@@ -8,7 +8,7 @@ import (
 	"reflect"
 	"sync"
 
-	"fyne.io/fyne/v2"
+	"github.com/gorustyt/fyne/v2"
 )
 
 var (

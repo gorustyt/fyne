@@ -3,12 +3,12 @@ package widget
 import (
 	"testing"
 
-	"fyne.io/fyne/v2"
-	"fyne.io/fyne/v2/canvas"
-	"fyne.io/fyne/v2/data/binding"
-	"fyne.io/fyne/v2/internal/painter/software"
-	"fyne.io/fyne/v2/test"
-	"fyne.io/fyne/v2/theme"
+	"github.com/gorustyt/fyne/v2"
+	"github.com/gorustyt/fyne/v2/canvas"
+	"github.com/gorustyt/fyne/v2/data/binding"
+	"github.com/gorustyt/fyne/v2/internal/painter/software"
+	"github.com/gorustyt/fyne/v2/test"
+	"github.com/gorustyt/fyne/v2/theme"
 
 	"github.com/stretchr/testify/assert"
 )

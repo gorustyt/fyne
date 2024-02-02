@@ -5,7 +5,7 @@
 package async
 
 import (
-	"fyne.io/fyne/v2"
+	"github.com/gorustyt/fyne/v2"
 )
 
 // CanvasObjectQueue implements lock-free FIFO freelist based queue.

@@ -11,11 +11,11 @@ import (
 	"path/filepath"
 	"sync"
 
-	"fyne.io/fyne/v2"
-	"fyne.io/fyne/v2/internal/cache"
-	"fyne.io/fyne/v2/internal/scale"
-	"fyne.io/fyne/v2/internal/svg"
-	"fyne.io/fyne/v2/storage"
+	"github.com/gorustyt/fyne/v2"
+	"github.com/gorustyt/fyne/v2/internal/cache"
+	"github.com/gorustyt/fyne/v2/internal/scale"
+	"github.com/gorustyt/fyne/v2/internal/svg"
+	"github.com/gorustyt/fyne/v2/storage"
 )
 
 // ImageFill defines the different type of ways an image can stretch to fill its space.

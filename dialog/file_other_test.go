@@ -6,7 +6,7 @@ package dialog
 import (
 	"testing"
 
-	"fyne.io/fyne/v2/storage"
+	"github.com/gorustyt/fyne/v2/storage"
 	"github.com/stretchr/testify/assert"
 )
 

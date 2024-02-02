@@ -1,6 +1,6 @@
 package gl
 
-import "fyne.io/fyne/v2"
+import "github.com/gorustyt/fyne/v2"
 
 type Painter3D struct {
 	prog Program //sharder
@@ -35,11 +35,33 @@ type Canvas3D interface {
 	After(p *Painter3D)
 }
 
+var _ Canvas3D = (*Canvas3dObj)(nil)
+
 type Canvas3dObj struct {
 	Painter *Painter3D
 	objs    []Canvas3D
 
 	vertStr, fragStr string
+}
+
+func (c *Canvas3dObj) Init(p *Painter3D) {
+	p.EnableDepthTest()
+	for _, v := range c.objs {
+		v.Init(c.Painter)
+	}
+}
+
+func (c *Canvas3dObj) Draw(p *Painter3D, pos fyne.Position, frame fyne.Size) {
+	for _, v := range c.objs {
+		v.Draw(c.Painter, pos, frame)
+	}
+}
+
+func (c *Canvas3dObj) After(p *Painter3D) {
+	for i := len(c.objs) - 1; i >= 0; i-- {
+		c.objs[i].After(c.Painter)
+	}
+	p.DisableDepthTest()
 }
 
 func (c *Canvas3dObj) SetShaderConfig(vertStr, fragStr string) {

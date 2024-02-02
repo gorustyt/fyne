@@ -3,9 +3,9 @@ package container
 import (
 	"testing"
 
-	"fyne.io/fyne/v2"
-	"fyne.io/fyne/v2/internal/cache"
-	"fyne.io/fyne/v2/widget"
+	"github.com/gorustyt/fyne/v2"
+	"github.com/gorustyt/fyne/v2/internal/cache"
+	"github.com/gorustyt/fyne/v2/widget"
 
 	"github.com/stretchr/testify/assert"
 )

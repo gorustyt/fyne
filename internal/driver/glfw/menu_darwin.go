@@ -11,11 +11,11 @@ import (
 	"strings"
 	"unsafe"
 
-	"fyne.io/fyne/v2"
-	"fyne.io/fyne/v2/canvas"
-	"fyne.io/fyne/v2/internal/painter"
-	"fyne.io/fyne/v2/internal/svg"
-	"fyne.io/fyne/v2/theme"
+	"github.com/gorustyt/fyne/v2"
+	"github.com/gorustyt/fyne/v2/canvas"
+	"github.com/gorustyt/fyne/v2/internal/painter"
+	"github.com/gorustyt/fyne/v2/internal/svg"
+	"github.com/gorustyt/fyne/v2/theme"
 )
 
 /*

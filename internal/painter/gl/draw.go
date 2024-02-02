@@ -4,9 +4,9 @@ import (
 	"image/color"
 	"math"
 
-	"fyne.io/fyne/v2"
-	"fyne.io/fyne/v2/canvas"
-	paint "fyne.io/fyne/v2/internal/painter"
+	"github.com/gorustyt/fyne/v2"
+	"github.com/gorustyt/fyne/v2/canvas"
+	paint "github.com/gorustyt/fyne/v2/internal/painter"
 )
 
 func (p *painter) createBuffer(points []float32) Buffer {
@@ -95,20 +95,12 @@ func (p *painter) drawCustomObj(obj *Canvas3dObj, pos fyne.Position, frame fyne.
 		pa := NewPainter3D(p.ctx)
 		obj.Painter = pa
 		pa.prog = p.createProgramWithShader([]byte(obj.vertStr), []byte(obj.fragStr))
+		obj.Init(pa)
 	}
 	p.ctx.UseProgram(obj.Painter.prog)
-	for _, v := range obj.objs {
-		v.Init(obj.Painter)
-	}
-	for _, v := range obj.objs {
-		v.Apply(obj.Painter)
-	}
-	for _, v := range obj.objs {
-		v.Draw(obj.Painter, pos, frame)
-	}
-	for i := len(obj.objs) - 1; i >= 0; i-- {
-		obj.objs[i].After(obj.Painter)
-	}
+	obj.Draw(obj.Painter, pos, frame)
+	obj.After(obj.Painter)
+
 }
 
 func (p *painter) drawRaster(img *canvas.Raster, pos fyne.Position, frame fyne.Size) {

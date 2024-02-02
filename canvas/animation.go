@@ -4,7 +4,7 @@ import (
 	"image/color"
 	"time"
 
-	"fyne.io/fyne/v2"
+	"github.com/gorustyt/fyne/v2"
 )
 
 const (

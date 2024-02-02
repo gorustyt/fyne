@@ -3,9 +3,9 @@ package internal
 import (
 	"sync"
 
-	"fyne.io/fyne/v2"
-	"fyne.io/fyne/v2/internal/app"
-	"fyne.io/fyne/v2/internal/widget"
+	"github.com/gorustyt/fyne/v2"
+	"github.com/gorustyt/fyne/v2/internal/app"
+	"github.com/gorustyt/fyne/v2/internal/widget"
 )
 
 // OverlayStack implements fyne.OverlayStack

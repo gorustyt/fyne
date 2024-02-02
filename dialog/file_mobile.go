@@ -6,9 +6,9 @@ package dialog
 import (
 	"os"
 
-	"fyne.io/fyne/v2"
-	"fyne.io/fyne/v2/internal/driver/mobile"
-	"fyne.io/fyne/v2/storage"
+	"github.com/gorustyt/fyne/v2"
+	"github.com/gorustyt/fyne/v2/internal/driver/mobile"
+	"github.com/gorustyt/fyne/v2/storage"
 )
 
 func (f *fileDialog) getPlaces() []favoriteItem {

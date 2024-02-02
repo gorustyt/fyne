@@ -5,8 +5,8 @@ import (
 	"syscall"
 	"unsafe"
 
-	"fyne.io/fyne/v2"
-	"fyne.io/fyne/v2/internal/scale"
+	"github.com/gorustyt/fyne/v2"
+	"github.com/gorustyt/fyne/v2/internal/scale"
 
 	"golang.org/x/sys/windows/registry"
 )

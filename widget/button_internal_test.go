@@ -5,12 +5,12 @@ import (
 	"image/color"
 	"testing"
 
-	"fyne.io/fyne/v2"
-	"fyne.io/fyne/v2/canvas"
-	"fyne.io/fyne/v2/internal/cache"
-	col "fyne.io/fyne/v2/internal/color"
-	"fyne.io/fyne/v2/test"
-	"fyne.io/fyne/v2/theme"
+	"github.com/gorustyt/fyne/v2"
+	"github.com/gorustyt/fyne/v2/canvas"
+	"github.com/gorustyt/fyne/v2/internal/cache"
+	col "github.com/gorustyt/fyne/v2/internal/color"
+	"github.com/gorustyt/fyne/v2/test"
+	"github.com/gorustyt/fyne/v2/theme"
 
 	"github.com/stretchr/testify/assert"
 )

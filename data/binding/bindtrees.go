@@ -6,7 +6,7 @@ package binding
 import (
 	"bytes"
 
-	"fyne.io/fyne/v2"
+	"github.com/gorustyt/fyne/v2"
 )
 
 // BoolTree supports binding a tree of bool values.

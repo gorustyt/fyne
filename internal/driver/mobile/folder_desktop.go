@@ -4,7 +4,7 @@
 package mobile
 
 import (
-	"fyne.io/fyne/v2"
+	"github.com/gorustyt/fyne/v2"
 )
 
 func canListURI(fyne.URI) bool {

@@ -1,8 +1,8 @@
 package canvas3d
 
 import (
-	"fyne.io/fyne/v2"
-	"fyne.io/fyne/v2/internal/painter/gl"
+	"github.com/gorustyt/fyne/v2"
+	"github.com/gorustyt/fyne/v2/internal/painter/gl"
 )
 
 var _ gl.Canvas3D = (*VertexFloat32Array)(nil)

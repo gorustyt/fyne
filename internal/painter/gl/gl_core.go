@@ -11,7 +11,7 @@ import (
 
 	"github.com/go-gl/gl/v4.2-core/gl"
 
-	"fyne.io/fyne/v2"
+	"github.com/gorustyt/fyne/v2"
 )
 
 const (
