@@ -8,6 +8,7 @@ import (
 type ICanvas3d interface {
 	SetShaderConfig(vertStr, fragStr string)
 	AppendObj(obj gl.Canvas3D)
+	Reset()
 	fyne.CanvasObject
 }
 type Canvas3d struct {
@@ -23,4 +24,7 @@ func (c *Canvas3d) AppendObj(obj gl.Canvas3D) {
 }
 func (c *Canvas3d) SetShaderConfig(vertStr, fragStr string) {
 	c.VertStr, c.FragStr = vertStr, fragStr
+}
+func (c *Canvas3d) Reset() {
+	c.Objs = c.Objs[:0]
 }
