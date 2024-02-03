@@ -94,7 +94,7 @@ func (p *painter) drawCustomObj(obj *Canvas3dObj, pos fyne.Position, frame fyne.
 	if obj.Painter == nil {
 		pa := NewPainter3D(p.ctx)
 		obj.Painter = pa
-		pa.prog = p.createProgramWithShader([]byte(obj.vertStr), []byte(obj.fragStr))
+		pa.prog = p.createProgramWithShader([]byte(obj.VertStr), []byte(obj.FragStr))
 		obj.Init(pa)
 	}
 	p.ctx.UseProgram(obj.Painter.prog)
