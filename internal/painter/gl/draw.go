@@ -91,6 +91,9 @@ func (p *painter) drawObject(o fyne.CanvasObject, pos fyne.Position, frame fyne.
 }
 
 func (p *painter) drawCustomObj(obj *Canvas3dObj, pos fyne.Position, frame fyne.Size) {
+	if obj.VertStr == "" || obj.FragStr == "" {
+		return
+	}
 	if obj.Painter == nil {
 		pa := NewPainter3D(p.ctx)
 		obj.Painter = pa

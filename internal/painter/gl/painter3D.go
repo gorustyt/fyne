@@ -19,6 +19,14 @@ func (p *Painter3D) HasShader() bool {
 	return p.prog == 0
 }
 
+func (p *Painter3D) DrawTrianglesByElement(index []uint32) {
+	p.context.DrawElementsArrays(triangles, index)
+}
+
+func (p *Painter3D) DrawTriangles(count int) {
+	p.context.DrawArrays(triangles, 0, count)
+}
+
 func (p *Painter3D) DefineVertexArray(name string, size, stride, offset int) {
 	vertAttrib := p.GetAttribLocation(p.prog, name)
 	p.context.EnableVertexAttribArray(vertAttrib)
