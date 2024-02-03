@@ -77,8 +77,8 @@ func (v *VertexFloat32Array) AddOffset(points []float32, pos fyne.Position, size
 	copy(res, points)
 	for i := 0; i < len(points); i += stride {
 		begin := i + v.PositionSize[1]
-		points[begin] += offsetX
-		points[begin+1] += offsetY
+		res[begin] += offsetX
+		res[begin+1] += offsetY
 	}
 	return res
 }
