@@ -1,10 +1,14 @@
 package canvas3d
 
-import "github.com/gorustyt/fyne/v2/internal/painter/gl"
+import (
+	"github.com/gorustyt/fyne/v2"
+	"github.com/gorustyt/fyne/v2/internal/painter/gl"
+)
 
 type ICanvas3d interface {
 	SetShaderConfig(vertStr, fragStr string)
 	AppendObj(obj gl.Canvas3D)
+	fyne.CanvasObject
 }
 type Canvas3d struct {
 	*gl.Canvas3dObj
