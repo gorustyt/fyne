@@ -107,6 +107,6 @@ func (c *Canvas3dObj) Refresh() {
 
 }
 
-func NewCustomObj() fyne.CanvasObject {
+func NewCustomObj() *Canvas3dObj {
 	return &Canvas3dObj{}
 }

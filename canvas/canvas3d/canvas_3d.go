@@ -16,7 +16,7 @@ type Canvas3d struct {
 }
 
 func NewCanvas3d() *Canvas3d {
-	return &Canvas3d{}
+	return &Canvas3d{Canvas3dObj: gl.NewCustomObj()}
 }
 
 func (c *Canvas3d) AppendObj(obj gl.Canvas3D) {
