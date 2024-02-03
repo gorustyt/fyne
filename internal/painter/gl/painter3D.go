@@ -38,34 +38,29 @@ type Canvas3D interface {
 var _ Canvas3D = (*Canvas3dObj)(nil)
 
 type Canvas3dObj struct {
-	Painter *Painter3D
-	objs    []Canvas3D
-
-	vertStr, fragStr string
+	Painter          *Painter3D
+	Objs             []Canvas3D
+	VertStr, FragStr string
 }
 
 func (c *Canvas3dObj) Init(p *Painter3D) {
 	p.EnableDepthTest()
-	for _, v := range c.objs {
+	for _, v := range c.Objs {
 		v.Init(c.Painter)
 	}
 }
 
 func (c *Canvas3dObj) Draw(p *Painter3D, pos fyne.Position, frame fyne.Size) {
-	for _, v := range c.objs {
+	for _, v := range c.Objs {
 		v.Draw(c.Painter, pos, frame)
 	}
 }
 
 func (c *Canvas3dObj) After(p *Painter3D) {
-	for i := len(c.objs) - 1; i >= 0; i-- {
-		c.objs[i].After(c.Painter)
+	for i := len(c.Objs) - 1; i >= 0; i-- {
+		c.Objs[i].After(c.Painter)
 	}
 	p.DisableDepthTest()
-}
-
-func (c *Canvas3dObj) SetShaderConfig(vertStr, fragStr string) {
-	c.vertStr, c.fragStr = vertStr, fragStr
 }
 
 func (c *Canvas3dObj) Move(position fyne.Position) {
