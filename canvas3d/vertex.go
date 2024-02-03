@@ -45,6 +45,11 @@ func (v *VertexFloat32Array) Draw(p *gl.Painter3D, pos fyne.Position, frame fyne
 	if len(v.ColorSize) == 2 {
 		p.DefineVertexArray("color", v.ColorSize[0], stride, v.ColorSize[1])
 	}
+	if len(v.Index) != 0 {
+		p.DrawTrianglesByElement(v.Index)
+	} else {
+		p.DrawTriangles(len(points) / stride)
+	}
 
 }
 
