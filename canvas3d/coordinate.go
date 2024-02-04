@@ -1,7 +1,10 @@
 package canvas3d
 
+import "C"
 import (
+	"github.com/go-gl/mathgl/mgl64"
 	"github.com/gorustyt/fyne/v2"
+	"math"
 
 	"github.com/go-gl/mathgl/mgl32"
 	"github.com/gorustyt/fyne/v2/internal/painter/gl"
@@ -12,54 +15,190 @@ const (
 	ViewName    = "view"
 	ModelName   = "model"
 )
+const (
+	Forward = iota
+	Backward
+	Left
+	Right
+)
+const (
+	Yaw       = -90.0
+	Pitch     = 0.0
+	Speed     = 3.0
+	Sensitivy = 0.1
+)
 
-var _ gl.Canvas3D = (*Coordinate)(nil)
+const (
+	Near = 0
+	Far  = 100
+)
+
+var (
+	_ gl.Canvas3D              = (*Coordinate)(nil)
+	_ fyne.Scrollable          = (*Coordinate)(nil)
+	_ fyne.Draggable           = (*Coordinate)(nil)
+	_ gl.Canvas3DBeforePainter = (*Coordinate)(nil)
+)
 
 type Coordinate struct {
-	Project mgl32.Mat4
-	View    mgl32.Mat4
-	Model   mgl32.Mat4
 	*ViewConfig
 	*ProjectConfig
 	*ModelConfig
+	frameSize  fyne.Size
+	firstMouse bool
 }
 
-func (c Coordinate) Init(p *gl.Painter3D) {
+func (c *Coordinate) UpdateFrameSize(frameSize fyne.Size) {
+	if c.frameSize != frameSize {
+		c.frameSize = frameSize
+		c.LastX = frameSize.Width / 2
+		c.LastY = frameSize.Height / 2
+		c.firstMouse = true
+	}
 
 }
 
-func (c Coordinate) After(p *gl.Painter3D) {
+func (c *Coordinate) BeforeDraw(p *gl.Painter3D, pos fyne.Position, frame fyne.Size) {
+	c.UpdateFrameSize(frame)
+	project := mgl32.Perspective(mgl32.DegToRad(c.Fov), frame.Width/frame.Height, c.Near, c.Far)
+	p.UniformMatrix4fv(p.Program(), ProjectName, project)
+}
+
+func (c *Coordinate) Dragged(event *fyne.DragEvent) {
+	xPos := event.AbsolutePosition.X
+	yPos := event.AbsolutePosition.Y
+	if c.firstMouse {
+		c.LastX = xPos
+		c.LastY = yPos
+		c.firstMouse = false
+	}
+	xOffset := float64(xPos - c.LastX)
+	yOffset := float64(c.LastY - yPos)
+	c.LastX = xPos
+	c.LastY = yPos
+	xOffset *= c.MouseSensitivity
+	yOffset *= c.MouseSensitivity
+
+	c.Yaw += xOffset
+	c.Pitch += yOffset
+
+	// Make sure that when pitch is out of bounds, screen doesn't get flipped
+	if c.ConstrainPitch {
+		if c.Pitch > 89.0 {
+			c.Pitch = 89.0
+		}
+		if c.Pitch < -89.0 {
+			c.Pitch = -89.0
+		}
+	}
 
 }
 
-func (c Coordinate) Draw(ctx *gl.Painter3D, pos fyne.Position, frame fyne.Size) {
-	ctx.UniformMatrix4fv(ctx.Program(), ProjectName, c.Project)
-	ctx.UniformMatrix4fv(ctx.Program(), ViewName, c.View)
-	ctx.UniformMatrix4fv(ctx.Program(), ModelName, c.Model)
+func (c *Coordinate) DragEnd() {
+	x := float32(math.Cos(mgl64.DegToRad(c.Yaw)) * math.Cos(mgl64.DegToRad(c.Pitch)))
+	y := float32(math.Sin(mgl64.DegToRad(c.Pitch)))
+	z := float32(math.Sin(mgl64.DegToRad(c.Yaw)) * math.Cos(mgl64.DegToRad(c.Pitch)))
+	front := mgl32.Vec3{x, y, z}
+	front = front.Normalize()
+	// Also re-calculate the Right and Up vector
+	// Normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
+	c.Right = front.Cross(c.WorldUp).Normalize()
+	c.Up = c.Right.Cross(c.Front).Normalize()
+}
+
+func (c *Coordinate) Scrolled(event *fyne.ScrollEvent) {
+	yOffset := event.AbsolutePosition.Y
+	if c.Fov >= 1.0 && c.Fov <= 45. {
+		c.Fov -= yOffset
+		if c.Fov <= 1.0 {
+			c.Fov = 1.0
+		}
+		if c.Fov >= 45.0 {
+			c.Fov = 45.0
+		}
+	}
+
+}
+
+func (c *Coordinate) InitOnce(p *gl.Painter3D) {
+
+}
+
+func (c *Coordinate) Init(p *gl.Painter3D) {
+	p.UniformMatrix4fv(p.Program(), ViewName, c.GetView())
+	p.UniformMatrix4fv(p.Program(), ModelName, c.mat)
+}
+
+func (c *Coordinate) After(p *gl.Painter3D) {
+
 }
 
 func NewCoordinate() *Coordinate {
 	return &Coordinate{
-		Project:       mgl32.Ident4(),
-		View:          mgl32.Ident4(),
-		Model:         mgl32.Ident4(),
-		ModelConfig:   NewModelConfig(),
-		ProjectConfig: &ProjectConfig{},
-		ViewConfig:    &ViewConfig{},
+		firstMouse:  true,
+		ModelConfig: NewModelConfig(),
+		ProjectConfig: &ProjectConfig{
+			Near: Near,
+			Far:  Far,
+			Fov:  45,
+		},
+		ViewConfig: &ViewConfig{
+			Yaw:              Yaw,
+			Pitch:            Pitch,
+			Front:            mgl32.Vec3{0.0, 0.0, -1.0},
+			Position:         mgl32.Vec3{0.0, 0.0, 3},
+			WorldUp:          mgl32.Vec3{0, 1, 0},
+			MovementSpeed:    Speed,
+			MouseSensitivity: Sensitivy,
+			ConstrainPitch:   true,
+		},
 	}
 }
 
 type ViewConfig struct {
-	Eye    mgl32.Vec3
-	Center mgl32.Vec3
-	Up     mgl32.Vec3
+	Position mgl32.Vec3
+	Front    mgl32.Vec3
+	Up       mgl32.Vec3
+	Right    mgl32.Vec3
+	WorldUp  mgl32.Vec3
+
+	Yaw   float64
+	Pitch float64
+
+	LastX float32
+	LastY float32
+
+	MovementSpeed    float64
+	MouseSensitivity float64
+
+	ConstrainPitch bool
+}
+
+func (c *ViewConfig) ProcessKeyboard(direction int, deltaTime float64) {
+	velocity := float32(c.MovementSpeed * deltaTime)
+	if direction == Forward {
+		c.Position = c.Position.Add(c.Front.Mul(velocity))
+	}
+	if direction == Backward {
+		c.Position = c.Position.Sub(c.Front.Mul(velocity))
+	}
+	if direction == Left {
+		c.Position = c.Position.Sub(c.Right.Mul(velocity))
+	}
+	if direction == Right {
+		c.Position = c.Position.Add(c.Right.Mul(velocity))
+	}
+}
+
+func (c *ViewConfig) GetView() mgl32.Mat4 {
+	eye := c.Position
+	return mgl32.LookAtV(eye, eye.Add(c.Front), c.Up)
 }
 
 type ProjectConfig struct {
-	Near      float32
-	Far       float32
-	FrameSize fyne.Size
-	Angle     float32
+	Near float32
+	Far  float32
+	Fov  float32
 }
 
 type ModelConfig struct {

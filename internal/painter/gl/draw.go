@@ -98,11 +98,13 @@ func (p *painter) drawCustomObj(obj *Canvas3dObj, pos fyne.Position, frame fyne.
 		pa := NewPainter3D(p.ctx)
 		obj.Painter = pa
 		pa.prog = p.createProgramWithShader([]byte(obj.VertStr), []byte(obj.FragStr))
-		obj.Init(pa)
+		obj.InitOnce()
 	}
+	obj.Init()
 	p.ctx.UseProgram(obj.Painter.prog)
-	obj.Draw(obj.Painter, pos, frame)
-	obj.After(obj.Painter)
+	obj.BeforeDraw(pos, frame)
+	obj.Draw(pos, frame)
+	obj.After()
 
 }
 

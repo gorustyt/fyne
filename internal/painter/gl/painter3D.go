@@ -38,12 +38,18 @@ func (p *Painter3D) BindTexture(texture Texture) {
 }
 
 type Canvas3D interface {
+	InitOnce(p *Painter3D)
 	Init(p *Painter3D)
-	Draw(p *Painter3D, pos fyne.Position, Frame fyne.Size)
 	After(p *Painter3D)
 }
 
-var _ Canvas3D = (*Canvas3dObj)(nil)
+type Canvas3DBeforePainter interface {
+	BeforeDraw(p *Painter3D, pos fyne.Position, Frame fyne.Size)
+}
+
+type Canvas3DPainter interface {
+	Draw(p *Painter3D, pos fyne.Position, Frame fyne.Size)
+}
 
 type Canvas3dObj struct {
 	Painter          *Painter3D
@@ -51,26 +57,63 @@ type Canvas3dObj struct {
 	VertStr, FragStr string
 }
 
-func (c *Canvas3dObj) Init(p *Painter3D) {
-	p.EnableDepthTest()
+func (c *Canvas3dObj) InitOnce() {
+	for _, v := range c.Objs {
+		v.InitOnce(c.Painter)
+	}
+}
+
+func (c *Canvas3dObj) Init() {
+	c.Painter.EnableDepthTest()
 	for _, v := range c.Objs {
 		v.Init(c.Painter)
 	}
 }
 
-func (c *Canvas3dObj) Draw(p *Painter3D, pos fyne.Position, frame fyne.Size) {
+func (c *Canvas3dObj) BeforeDraw(pos fyne.Position, frame fyne.Size) {
 	for _, v := range c.Objs {
-		v.Draw(c.Painter, pos, frame)
+		if cc, ok := v.(Canvas3DBeforePainter); ok {
+			cc.BeforeDraw(c.Painter, pos, frame)
+		}
 	}
 }
 
-func (c *Canvas3dObj) After(p *Painter3D) {
+func (c *Canvas3dObj) Draw(pos fyne.Position, frame fyne.Size) {
+	for _, v := range c.Objs {
+		if cc, ok := v.(Canvas3DPainter); ok {
+			cc.Draw(c.Painter, pos, frame)
+		}
+	}
+}
+
+func (c *Canvas3dObj) After() {
 	for i := len(c.Objs) - 1; i >= 0; i-- {
 		c.Objs[i].After(c.Painter)
 	}
-	p.DisableDepthTest()
+	c.Painter.DisableDepthTest()
 }
 
+func (c *Canvas3dObj) Dragged(ev *fyne.DragEvent) {
+	for _, v := range c.Objs {
+		if p, ok := v.(fyne.Draggable); ok {
+			p.Dragged(ev)
+		}
+	}
+}
+func (c *Canvas3dObj) DragEnd() {
+	for _, v := range c.Objs {
+		if p, ok := v.(fyne.Draggable); ok {
+			p.DragEnd()
+		}
+	}
+}
+func (c *Canvas3dObj) Scrolled(ev *fyne.ScrollEvent) {
+	for _, v := range c.Objs {
+		if p, ok := v.(fyne.Scrollable); ok {
+			p.Scrolled(ev)
+		}
+	}
+}
 func (c *Canvas3dObj) Move(position fyne.Position) {
 
 }

@@ -2,7 +2,6 @@ package canvas3d
 
 import (
 	"github.com/go-gl/mathgl/mgl32"
-	"github.com/gorustyt/fyne/v2"
 	"github.com/gorustyt/fyne/v2/internal/painter/gl"
 )
 
@@ -19,8 +18,18 @@ type Material struct {
 	SpecularStrength float32
 }
 
-func (m *Material) Init(p *gl.Painter3D) {
+func (m *Material) InitOnce(p *gl.Painter3D) {
 
+}
+
+func (m *Material) Init(p *gl.Painter3D) {
+	p.Uniform3f(p.GetUniformLocation(p.Program(), "material.ambient"), m.Ambient)
+	p.Uniform3f(p.GetUniformLocation(p.Program(), "material.diffuse"), m.Diffuse)
+	p.Uniform3f(p.GetUniformLocation(p.Program(), "material.specular"), m.Specular)
+
+	p.Uniform1f(p.GetUniformLocation(p.Program(), "material.ambient_strength"), m.AmbientStrength)
+	p.Uniform1f(p.GetUniformLocation(p.Program(), "material.diffuse_strength"), m.DiffuseStrength)
+	p.Uniform1f(p.GetUniformLocation(p.Program(), "material.specular_strength"), m.SpecularStrength)
 }
 
 func (m *Material) After(p *gl.Painter3D) {
@@ -34,15 +43,4 @@ func NewMaterial() *Material {
 		DiffuseStrength:  1,
 		SpecularStrength: 1,
 	}
-}
-
-func (m *Material) Draw(ctx *gl.Painter3D, pos fyne.Position, frame fyne.Size) {
-	ctx.Uniform3f(ctx.GetUniformLocation(ctx.Program(), "material.ambient"), m.Ambient)
-	ctx.Uniform3f(ctx.GetUniformLocation(ctx.Program(), "material.diffuse"), m.Diffuse)
-	ctx.Uniform3f(ctx.GetUniformLocation(ctx.Program(), "material.specular"), m.Specular)
-
-	ctx.Uniform1f(ctx.GetUniformLocation(ctx.Program(), "material.ambient_strength"), m.AmbientStrength)
-	ctx.Uniform1f(ctx.GetUniformLocation(ctx.Program(), "material.diffuse_strength"), m.DiffuseStrength)
-	ctx.Uniform1f(ctx.GetUniformLocation(ctx.Program(), "material.specular_strength"), m.SpecularStrength)
-
 }

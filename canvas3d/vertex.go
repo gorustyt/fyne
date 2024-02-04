@@ -5,7 +5,10 @@ import (
 	"github.com/gorustyt/fyne/v2/internal/painter/gl"
 )
 
-var _ gl.Canvas3D = (*VertexFloat32Array)(nil)
+var (
+	_ gl.Canvas3D        = (*VertexFloat32Array)(nil)
+	_ gl.Canvas3DPainter = (*VertexFloat32Array)(nil)
+)
 
 type VertexFloat32Array struct {
 	Arr          []float32
@@ -15,6 +18,10 @@ type VertexFloat32Array struct {
 	TexCoordSize []int
 	ColorSize    []int
 	vbo, veo     gl.Buffer
+}
+
+func (v *VertexFloat32Array) InitOnce(p *gl.Painter3D) {
+
 }
 
 func NewVertexFloat32Array() *VertexFloat32Array {

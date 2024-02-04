@@ -2,7 +2,6 @@ package canvas3d
 
 import (
 	"github.com/go-gl/mathgl/mgl32"
-	"github.com/gorustyt/fyne/v2"
 	"github.com/gorustyt/fyne/v2/internal/painter/gl"
 )
 
@@ -22,16 +21,12 @@ type Light struct {
 }
 
 func (m *Light) Init(p *gl.Painter3D) {
-
+	m.Material.Init(p)
+	p.Uniform3f(p.GetUniformLocation(p.Program(), LightDirection), m.Position)
 }
 
 func (m *Light) After(p *gl.Painter3D) {
 
-}
-
-func (m *Light) Draw(ctx *gl.Painter3D, pos fyne.Position, frame fyne.Size) {
-	m.Material.Draw(ctx, pos, frame)
-	ctx.Uniform3f(ctx.GetUniformLocation(ctx.Program(), LightDirection), m.Position)
 }
 
 func NewLight() *Light {
@@ -53,18 +48,15 @@ func NewPointLight() *PointLight {
 	}
 }
 func (m *PointLight) Init(p *gl.Painter3D) {
-
+	m.Light.Init(p)
+	p.Uniform1f(p.GetUniformLocation(p.Program(), LightConstant), m.Constant)
+	p.Uniform1f(p.GetUniformLocation(p.Program(), LightLinear), m.Linear)
+	p.Uniform1f(p.GetUniformLocation(p.Program(), LightQuadratic), m.Quadratic)
+	p.Uniform3f(p.GetUniformLocation(p.Program(), LightPosition), m.Position)
 }
 
 func (m *PointLight) After(p *gl.Painter3D) {
 
-}
-func (m *PointLight) Draw(ctx *gl.Painter3D, pos fyne.Position, frame fyne.Size) {
-	m.Light.Draw(ctx, pos, frame)
-	ctx.Uniform1f(ctx.GetUniformLocation(ctx.Program(), LightConstant), m.Constant)
-	ctx.Uniform1f(ctx.GetUniformLocation(ctx.Program(), LightLinear), m.Linear)
-	ctx.Uniform1f(ctx.GetUniformLocation(ctx.Program(), LightQuadratic), m.Quadratic)
-	ctx.Uniform3f(ctx.GetUniformLocation(ctx.Program(), LightPosition), m.Position)
 }
 
 type SpotLight struct {
@@ -78,16 +70,13 @@ func NewSpotLight() *SpotLight {
 	}
 }
 func (m *SpotLight) Init(p *gl.Painter3D) {
-
+	m.Light.Init(p)
+	p.Uniform1f(p.GetUniformLocation(p.Program(), LightCutOff), m.CutOff)
+	p.Uniform3f(p.GetUniformLocation(p.Program(), LightPosition), m.Position)
 }
 
 func (m *SpotLight) After(p *gl.Painter3D) {
 
-}
-func (m *SpotLight) Draw(ctx *gl.Painter3D, pos fyne.Position, frame fyne.Size) {
-	m.Light.Draw(ctx, pos, frame)
-	ctx.Uniform1f(ctx.GetUniformLocation(ctx.Program(), LightCutOff), m.CutOff)
-	ctx.Uniform3f(ctx.GetUniformLocation(ctx.Program(), LightPosition), m.Position)
 }
 
 type DirectionLight struct {
@@ -95,7 +84,7 @@ type DirectionLight struct {
 }
 
 func (m *DirectionLight) Init(p *gl.Painter3D) {
-
+	m.Light.Init(p)
 }
 func (m *DirectionLight) After(p *gl.Painter3D) {
 
@@ -104,7 +93,4 @@ func NewDirectionLight() *DirectionLight {
 	return &DirectionLight{
 		Light: NewLight(),
 	}
-}
-func (m *DirectionLight) Draw(ctx *gl.Painter3D, pos fyne.Position, frame fyne.Size) {
-	m.Light.Draw(ctx, pos, frame)
 }
