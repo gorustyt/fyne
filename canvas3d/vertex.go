@@ -28,7 +28,7 @@ func (v *VertexFloat32Array) Init(p *gl.Painter3D) {
 func (v *VertexFloat32Array) Draw(p *gl.Painter3D, pos fyne.Position, frame fyne.Size) {
 	points := v.AddOffset(v.Arr, pos, frame)
 	if len(v.Index) > 0 {
-		v.veo = p.MakeVaoWithEbo(points, v.Index)
+		v.vbo, v.veo = p.MakeVaoWithEbo(points, v.Index)
 	} else {
 		v.vbo = p.MakeVao(points)
 	}

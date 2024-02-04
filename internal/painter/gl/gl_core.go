@@ -297,8 +297,9 @@ func (c *coreContext) DisableDepthTest() {
 	gl.Disable(gl.DEPTH_TEST)
 }
 
-func (c *coreContext) MakeVaoWithEbo(points []float32, indexs []uint32) Buffer {
-	c.CreateBuffer()
+func (c *coreContext) MakeVaoWithEbo(points []float32, indexs []uint32) (Buffer, Buffer) {
+	vbo := c.CreateBuffer()
+	gl.BindBuffer(gl.ARRAY_BUFFER, uint32(vbo))
 	c.BufferData(gl.ARRAY_BUFFER, points, gl.STATIC_DRAW)
 
 	var ebo uint32
@@ -309,7 +310,7 @@ func (c *coreContext) MakeVaoWithEbo(points []float32, indexs []uint32) Buffer {
 	var vao uint32
 	gl.GenVertexArrays(1, &vao)
 	gl.BindVertexArray(vao)
-	return Buffer(ebo)
+	return vbo, Buffer(ebo)
 }
 
 func (c *coreContext) MakeVao(points []float32) Buffer {
