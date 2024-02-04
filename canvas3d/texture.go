@@ -2,7 +2,6 @@ package canvas3d
 
 import (
 	"fmt"
-
 	"github.com/gorustyt/fyne/v2/internal/painter/gl"
 	"image"
 	"os"
@@ -16,19 +15,19 @@ type Texture struct {
 }
 
 func (tex *Texture) InitOnce(p *gl.Painter3D) {
-
-}
-
-func NewTexture() *Texture {
-	return &Texture{}
-}
-func (tex *Texture) Init(p *gl.Painter3D) {
 	tex.createTexture(p)
 	for i, v := range tex.tex {
 		p.Uniform1i(p.Program(), fmt.Sprintf("texture%v", i+1), int32(i))
 		p.ActiveTexture(gl.GetTextureByIndex(i))
 		p.BindTexture(v)
 	}
+}
+
+func NewTexture() *Texture {
+	return &Texture{}
+}
+func (tex *Texture) Init(p *gl.Painter3D) {
+
 }
 
 func (tex *Texture) After(p *gl.Painter3D) {
