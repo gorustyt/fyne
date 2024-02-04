@@ -25,7 +25,7 @@ func NewTexture() *Texture {
 func (tex *Texture) Init(p *gl.Painter3D) {
 	tex.createTexture(p)
 	for i, v := range tex.tex {
-		p.Uniform1i(p.Program(), fmt.Sprintf("texture%v", i), int32(i))
+		p.Uniform1i(p.Program(), fmt.Sprintf("texture%v", i+1), int32(i))
 		p.ActiveTexture(gl.GetTextureByIndex(i))
 		p.BindTexture(v)
 	}
