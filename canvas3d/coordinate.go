@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	ProjectName = "project"
+	ProjectName = "projection"
 	ViewName    = "view"
 	ModelName   = "model"
 )
