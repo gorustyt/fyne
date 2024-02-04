@@ -12,7 +12,7 @@ func NewPainter3D(ctx context) *Painter3D {
 }
 
 func (p *Painter3D) Program() Program {
-	return p.Program()
+	return p.prog
 }
 
 func (p *Painter3D) HasShader() bool {
