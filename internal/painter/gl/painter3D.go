@@ -102,6 +102,7 @@ func (c *Canvas3dObj) Dragged(ev *fyne.DragEvent) {
 			p.Dragged(ev)
 		}
 	}
+
 }
 func (c *Canvas3dObj) DragEnd() {
 	for _, v := range c.Objs {
@@ -109,6 +110,7 @@ func (c *Canvas3dObj) DragEnd() {
 			p.DragEnd()
 		}
 	}
+	c.Refresh()
 }
 func (c *Canvas3dObj) Scrolled(ev *fyne.ScrollEvent) {
 	for _, v := range c.Objs {
@@ -116,6 +118,7 @@ func (c *Canvas3dObj) Scrolled(ev *fyne.ScrollEvent) {
 			p.Scrolled(ev)
 		}
 	}
+	c.Refresh()
 }
 func (c *Canvas3dObj) Move(position fyne.Position) {
 
@@ -146,7 +149,7 @@ func (c *Canvas3dObj) Resize(size fyne.Size) {
 }
 
 func (c *Canvas3dObj) Size() fyne.Size {
-	return fyne.Size{Width: 600, Height: 600}
+	return fyne.Size{Width: 600, Height: 1080}
 }
 
 func (c *Canvas3dObj) Refresh() {
