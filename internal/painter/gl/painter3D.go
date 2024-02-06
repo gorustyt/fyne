@@ -1,6 +1,9 @@
 package gl
 
-import "github.com/gorustyt/fyne/v2"
+import (
+	"github.com/gorustyt/fyne/v2"
+	"github.com/gorustyt/fyne/v2/canvas"
+)
 
 type Painter3D struct {
 	prog Program //sharder
@@ -135,7 +138,7 @@ func (c *Canvas3dObj) Show() {
 }
 
 func (c *Canvas3dObj) MinSize() fyne.Size {
-	return fyne.Size{Width: 600, Height: 600}
+	return fyne.Size{Width: 600, Height: 1080}
 }
 
 func (c *Canvas3dObj) Resize(size fyne.Size) {
@@ -147,7 +150,7 @@ func (c *Canvas3dObj) Size() fyne.Size {
 }
 
 func (c *Canvas3dObj) Refresh() {
-
+	canvas.Refresh(c)
 }
 
 func NewCustomObj() *Canvas3dObj {

@@ -29,7 +29,7 @@ const (
 )
 
 const (
-	Near = 0
+	Near = 0.1
 	Far  = 100
 )
 
@@ -107,7 +107,7 @@ func (c *Coordinate) DragEnd() {
 }
 
 func (c *Coordinate) Scrolled(event *fyne.ScrollEvent) {
-	yOffset := event.AbsolutePosition.Y
+	yOffset := event.Scrolled.DY
 	if c.Fov >= 1.0 && c.Fov <= 45. {
 		c.Fov -= yOffset
 		if c.Fov <= 1.0 {
@@ -134,7 +134,7 @@ func (c *Coordinate) After(p *gl.Painter3D) {
 }
 
 func NewCoordinate() *Coordinate {
-	return &Coordinate{
+	c := &Coordinate{
 		firstMouse:  true,
 		ModelConfig: NewModelConfig(),
 		ProjectConfig: &ProjectConfig{
@@ -153,6 +153,9 @@ func NewCoordinate() *Coordinate {
 			ConstrainPitch:   true,
 		},
 	}
+	c.Right = c.Front.Cross(c.WorldUp).Normalize()
+	c.Up = c.Right.Cross(c.Front).Normalize()
+	return c
 }
 
 type ViewConfig struct {
