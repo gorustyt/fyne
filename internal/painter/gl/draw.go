@@ -91,13 +91,17 @@ func (p *painter) drawObject(o fyne.CanvasObject, pos fyne.Position, frame fyne.
 }
 
 func (p *painter) drawCustomObj(obj *Canvas3dObj, pos fyne.Position, frame fyne.Size) {
-	if obj.VertStr == "" || obj.FragStr == "" {
+
+	vertStr, fragStr := obj.GetShader()
+	if vertStr == "" || fragStr == "" {
 		return
 	}
 	if obj.Painter == nil {
 		pa := NewPainter3D(p.ctx)
 		obj.Painter = pa
-		pa.prog = p.createProgramWithShader([]byte(obj.VertStr), []byte(obj.FragStr))
+	}
+	if obj.Painter.prog == 0 {
+		obj.Painter.prog = p.createProgramWithShader([]byte(vertStr), []byte(fragStr))
 		obj.InitOnce()
 	}
 	p.ctx.UseProgram(obj.Painter.prog)

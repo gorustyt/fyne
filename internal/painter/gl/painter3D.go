@@ -3,6 +3,7 @@ package gl
 import (
 	"github.com/gorustyt/fyne/v2"
 	"github.com/gorustyt/fyne/v2/canvas"
+	"strings"
 )
 
 type Painter3D struct {
@@ -57,7 +58,31 @@ type Canvas3DPainter interface {
 type Canvas3dObj struct {
 	Painter          *Painter3D
 	Objs             []Canvas3D
-	VertStr, FragStr string
+	vertStr, fragStr string
+	proCache         map[string]Program
+}
+
+func (c *Canvas3dObj) ChangeShader(vertStr, fragStr string) {
+	if c.vertStr == vertStr || c.fragStr == fragStr {
+		return
+	}
+	oldId := strings.Join([]string{c.vertStr, c.fragStr}, ",")
+	oldPro := c.Painter.prog
+	c.vertStr = vertStr
+	c.fragStr = fragStr
+	if oldId != "," {
+		id := strings.Join([]string{c.vertStr, c.fragStr}, ",") //TODO 压缩字符串
+		if pro, ok := c.proCache[id]; ok {
+			c.Painter.prog = pro
+		} else {
+			c.Painter.prog = 0
+		}
+		c.proCache[oldId] = oldPro
+	}
+}
+
+func (c *Canvas3dObj) GetShader() (vertStr, fragStr string) {
+	return c.vertStr, c.fragStr
 }
 
 func (c *Canvas3dObj) InitOnce() {
@@ -157,5 +182,5 @@ func (c *Canvas3dObj) Refresh() {
 }
 
 func NewCustomObj() *Canvas3dObj {
-	return &Canvas3dObj{}
+	return &Canvas3dObj{proCache: map[string]Program{}}
 }
