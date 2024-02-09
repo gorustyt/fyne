@@ -59,6 +59,7 @@ type Canvas3DPainter interface {
 type Canvas3dObj struct {
 	Painter          *Painter3D
 	Objs             []Canvas3D
+	RenderFuncs      []func(p context.Context)
 	vertStr, fragStr string
 	proCache         map[string]context.Program
 }
@@ -99,6 +100,9 @@ func (c *Canvas3dObj) Init() {
 	c.Painter.EnableDepthTest()
 	for _, v := range c.Objs {
 		v.Init(c.Painter)
+	}
+	for _, v := range c.RenderFuncs {
+		v(c.Painter.Context)
 	}
 }
 
