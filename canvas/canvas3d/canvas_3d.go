@@ -33,6 +33,7 @@ func (c *Canvas3d) SetShaderConfig(vertStr, fragStr string) {
 }
 func (c *Canvas3d) Reset() {
 	c.Objs = c.Objs[:0]
+	c.RenderFuncs = c.RenderFuncs[:0]
 }
 
 func (c *Canvas3d) GetRenderObj() fyne.CanvasObject {

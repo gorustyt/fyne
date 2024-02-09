@@ -2,6 +2,7 @@ package canvas3d
 
 import (
 	"fmt"
+	"github.com/gorustyt/fyne/v2/canvas/context"
 	"github.com/gorustyt/fyne/v2/internal/painter/gl"
 	"image"
 	"os"
@@ -11,7 +12,7 @@ var _ gl.Canvas3D = (*Texture)(nil)
 
 type Texture struct {
 	paths     []string
-	tex       []gl.Texture
+	tex       []context.Texture
 	MixParams float32
 }
 

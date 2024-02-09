@@ -2,6 +2,7 @@ package canvas3d
 
 import (
 	"github.com/gorustyt/fyne/v2"
+	"github.com/gorustyt/fyne/v2/canvas/context"
 	"github.com/gorustyt/fyne/v2/internal/painter/gl"
 )
 
@@ -17,7 +18,7 @@ type VertexFloat32Array struct {
 	NormalSize   []int
 	TexCoordSize []int
 	ColorSize    []int
-	vbo, veo     gl.Buffer
+	vbo, veo     context.Buffer
 }
 
 func (v *VertexFloat32Array) InitOnce(p *gl.Painter3D) {
