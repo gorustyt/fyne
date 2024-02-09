@@ -11,6 +11,7 @@ type ICanvas3d interface {
 	AppendObj(obj gl.Canvas3D)
 	Reset()
 	GetRenderObj() fyne.CanvasObject
+	AppendRenderFunc(fn func(prog context.Program, ctx context.Context))
 }
 type Canvas3d struct {
 	*gl.Canvas3dObj
@@ -20,7 +21,7 @@ func NewCanvas3d() *Canvas3d {
 	return &Canvas3d{Canvas3dObj: gl.NewCustomObj()}
 }
 
-func (c *Canvas3d) AppendRenderFunc(fn func(ctx context.Context)) {
+func (c *Canvas3d) AppendRenderFunc(fn func(prog context.Program, ctx context.Context)) {
 	c.RenderFuncs = append(c.RenderFuncs, fn)
 }
 

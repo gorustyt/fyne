@@ -59,7 +59,7 @@ type Canvas3DPainter interface {
 type Canvas3dObj struct {
 	Painter          *Painter3D
 	Objs             []Canvas3D
-	RenderFuncs      []func(p context.Context)
+	RenderFuncs      []func(prog context.Program, ctx context.Context)
 	vertStr, fragStr string
 	proCache         map[string]context.Program
 }
@@ -102,7 +102,7 @@ func (c *Canvas3dObj) Init() {
 		v.Init(c.Painter)
 	}
 	for _, v := range c.RenderFuncs {
-		v(c.Painter.Context)
+		v(c.Painter.prog, c.Painter.Context)
 	}
 }
 
