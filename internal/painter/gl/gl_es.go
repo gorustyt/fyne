@@ -11,6 +11,7 @@
 package gl
 
 import (
+	"github.com/gorustyt/fyne/v2/canvas/context"
 	"strings"
 
 	gl "github.com/go-gl/gl/v3.1/gles2"
@@ -86,7 +87,7 @@ func (p *painter) Init() {
 
 type esContext struct{}
 
-var _ context = (*esContext)(nil)
+var _ context.context = (*esContext)(nil)
 
 func (c *esContext) ActiveTexture(textureUnit uint32) {
 	gl.ActiveTexture(textureUnit)

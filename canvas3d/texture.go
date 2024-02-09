@@ -12,7 +12,7 @@ var _ gl.Canvas3D = (*Texture)(nil)
 type Texture struct {
 	paths     []string
 	tex       []gl.Texture
-	mixParams float32
+	MixParams float32
 }
 
 func (tex *Texture) InitOnce(p *gl.Painter3D) {
@@ -21,7 +21,7 @@ func (tex *Texture) InitOnce(p *gl.Painter3D) {
 
 func NewTexture() *Texture {
 	return &Texture{
-		mixParams: 0.2,
+		MixParams: 0.2,
 	}
 }
 func (tex *Texture) Init(p *gl.Painter3D) {
@@ -30,7 +30,7 @@ func (tex *Texture) Init(p *gl.Painter3D) {
 		p.ActiveTexture(gl.GetTextureByIndex(i))
 		p.BindTexture(v)
 	}
-	p.Uniform1f(p.GetUniformLocation(p.Program(), "mixParams"), tex.mixParams)
+	p.Uniform1f(p.GetUniformLocation(p.Program(), "mixParams"), tex.MixParams)
 }
 
 func (tex *Texture) After(p *gl.Painter3D) {

@@ -1,11 +1,12 @@
-package gl
+package context
 
 import (
 	"github.com/go-gl/mathgl/mgl32"
+	"github.com/gorustyt/fyne/v2/internal/cache"
 	"image"
 )
 
-type context interface {
+type Context interface {
 	ActiveTexture(textureUnit uint32)
 	AttachShader(program Program, shader Shader)
 	BindBuffer(target uint32, buf Buffer)
@@ -58,3 +59,19 @@ type context interface {
 	MakeVao(points []float32) Buffer
 	MakeVaoWithEbo(points []float32, index []uint32) (Buffer, Buffer)
 }
+
+type (
+	// Texture represents an uploaded GL texture
+	Texture cache.TextureType
+
+	// Attribute represents a GL attribute
+	Attribute int32
+	// Buffer represents a GL buffer
+	Buffer uint32
+	// Program represents a compiled GL program
+	Program uint32
+	// Shader represents a GL shader
+	Shader uint32
+	// Uniform represents a GL uniform
+	Uniform int32
+)

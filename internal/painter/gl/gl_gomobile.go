@@ -7,6 +7,7 @@ package gl
 import (
 	"encoding/binary"
 	"fmt"
+	"github.com/gorustyt/fyne/v2/canvas/context"
 	"math"
 
 	"github.com/gorustyt/fyne/v2/internal/driver/mobile/gl"
@@ -116,7 +117,7 @@ type mobileContext struct {
 	glContext gl.Context
 }
 
-var _ context = (*mobileContext)(nil)
+var _ context.context = (*mobileContext)(nil)
 
 func (c *mobileContext) ActiveTexture(textureUnit uint32) {
 	c.glContext.ActiveTexture(gl.Enum(textureUnit))

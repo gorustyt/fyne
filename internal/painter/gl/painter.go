@@ -3,6 +3,7 @@ package gl
 
 import (
 	"fmt"
+	"github.com/gorustyt/fyne/v2/canvas/context"
 	"image"
 
 	"github.com/gorustyt/fyne/v2"
@@ -64,12 +65,12 @@ func NewPainter(c fyne.Canvas, ctx driver.WithContext) Painter {
 
 type painter struct {
 	canvas                fyne.Canvas
-	ctx                   context
+	ctx                   context.Context
 	contextProvider       driver.WithContext
-	program               Program
-	lineProgram           Program
-	rectangleProgram      Program
-	roundRectangleProgram Program
+	program               context.Program
+	lineProgram           context.Program
+	rectangleProgram      context.Program
+	roundRectangleProgram context.Program
 	texScale              float32
 	pixScale              float32 // pre-calculate scale*texScale for each draw
 }
@@ -119,7 +120,7 @@ func (p *painter) StopClipping() {
 	p.logError()
 }
 
-func (p *painter) compileShader(source string, shaderType uint32) (Shader, error) {
+func (p *painter) compileShader(source string, shaderType uint32) (context.Shader, error) {
 	shader := p.ctx.CreateShader(shaderType)
 
 	p.ctx.ShaderSource(shader, source)
@@ -140,7 +141,7 @@ func (p *painter) compileShader(source string, shaderType uint32) (Shader, error
 
 	return shader, nil
 }
-func (p *painter) createProgramWithShader(vertexSrc, fragmentSrc []byte) Program {
+func (p *painter) createProgramWithShader(vertexSrc, fragmentSrc []byte) context.Program {
 	vertShader, err := p.compileShader(string(vertexSrc), vertexShader)
 	if err != nil {
 		panic(err)
@@ -173,7 +174,7 @@ func (p *painter) createProgramWithShader(vertexSrc, fragmentSrc []byte) Program
 	return prog
 }
 
-func (p *painter) createProgram(shaderFilename string) Program {
+func (p *painter) createProgram(shaderFilename string) context.Program {
 	// Why a switch over a filename?
 	// Because this allows for a minimal change, once we reach Go 1.16 and use go:embed instead of
 	// fyne bundle.

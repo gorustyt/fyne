@@ -5,6 +5,7 @@ package gl
 
 import (
 	"github.com/go-gl/mathgl/mgl32"
+	"github.com/gorustyt/fyne/v2/canvas/context"
 	"image"
 	"image/draw"
 	"strings"
@@ -45,21 +46,8 @@ const (
 	vertexShader          = gl.VERTEX_SHADER
 )
 
-const noBuffer = Buffer(0)
-const noShader = Shader(0)
-
-type (
-	// Attribute represents a GL attribute
-	Attribute int32
-	// Buffer represents a GL buffer
-	Buffer uint32
-	// Program represents a compiled GL program
-	Program uint32
-	// Shader represents a GL shader
-	Shader uint32
-	// Uniform represents a GL uniform
-	Uniform int32
-)
+const noBuffer = context.Buffer(0)
+const noShader = context.Shader(0)
 
 var textureFilterToGL = []int32{gl.LINEAR, gl.NEAREST, gl.LINEAR}
 
@@ -82,21 +70,21 @@ func (p *painter) Init() {
 
 type coreContext struct{}
 
-var _ context = (*coreContext)(nil)
+var _ context.Context = (*coreContext)(nil)
 
 func (c *coreContext) ActiveTexture(textureUnit uint32) {
 	gl.ActiveTexture(textureUnit)
 }
 
-func (c *coreContext) AttachShader(program Program, shader Shader) {
+func (c *coreContext) AttachShader(program context.Program, shader context.Shader) {
 	gl.AttachShader(uint32(program), uint32(shader))
 }
 
-func (c *coreContext) BindBuffer(target uint32, buf Buffer) {
+func (c *coreContext) BindBuffer(target uint32, buf context.Buffer) {
 	gl.BindBuffer(target, uint32(buf))
 }
 
-func (c *coreContext) BindTexture(target uint32, texture Texture) {
+func (c *coreContext) BindTexture(target uint32, texture context.Texture) {
 	gl.BindTexture(target, uint32(texture))
 }
 
@@ -120,35 +108,35 @@ func (c *coreContext) ClearColor(r, g, b, a float32) {
 	gl.ClearColor(r, g, b, a)
 }
 
-func (c *coreContext) CompileShader(shader Shader) {
+func (c *coreContext) CompileShader(shader context.Shader) {
 	gl.CompileShader(uint32(shader))
 }
 
-func (c *coreContext) CreateBuffer() Buffer {
+func (c *coreContext) CreateBuffer() context.Buffer {
 	var vbo uint32
 	gl.GenBuffers(1, &vbo)
-	return Buffer(vbo)
+	return context.Buffer(vbo)
 }
 
-func (c *coreContext) CreateProgram() Program {
-	return Program(gl.CreateProgram())
+func (c *coreContext) CreateProgram() context.Program {
+	return context.Program(gl.CreateProgram())
 }
 
-func (c *coreContext) CreateShader(typ uint32) Shader {
-	return Shader(gl.CreateShader(typ))
+func (c *coreContext) CreateShader(typ uint32) context.Shader {
+	return context.Shader(gl.CreateShader(typ))
 }
 
-func (c *coreContext) CreateTexture() (texture Texture) {
+func (c *coreContext) CreateTexture() (texture context.Texture) {
 	var tex uint32
 	gl.GenTextures(1, &tex)
-	return Texture(tex)
+	return context.Texture(tex)
 }
 
-func (c *coreContext) DeleteBuffer(buffer Buffer) {
+func (c *coreContext) DeleteBuffer(buffer context.Buffer) {
 	gl.DeleteBuffers(1, (*uint32)(&buffer))
 }
 
-func (c *coreContext) DeleteTexture(texture Texture) {
+func (c *coreContext) DeleteTexture(texture context.Texture) {
 	tex := uint32(texture)
 	gl.DeleteTextures(1, &tex)
 }
@@ -169,25 +157,25 @@ func (c *coreContext) Enable(capability uint32) {
 	gl.Enable(capability)
 }
 
-func (c *coreContext) EnableVertexAttribArray(attribute Attribute) {
+func (c *coreContext) EnableVertexAttribArray(attribute context.Attribute) {
 	gl.EnableVertexAttribArray(uint32(attribute))
 }
 
-func (c *coreContext) GetAttribLocation(program Program, name string) Attribute {
-	return Attribute(gl.GetAttribLocation(uint32(program), gl.Str(name+"\x00")))
+func (c *coreContext) GetAttribLocation(program context.Program, name string) context.Attribute {
+	return context.Attribute(gl.GetAttribLocation(uint32(program), gl.Str(name+"\x00")))
 }
 
 func (c *coreContext) GetError() uint32 {
 	return gl.GetError()
 }
 
-func (c *coreContext) GetProgrami(program Program, param uint32) int {
+func (c *coreContext) GetProgrami(program context.Program, param uint32) int {
 	var value int32
 	gl.GetProgramiv(uint32(program), param, &value)
 	return int(value)
 }
 
-func (c *coreContext) GetProgramInfoLog(program Program) string {
+func (c *coreContext) GetProgramInfoLog(program context.Program) string {
 	var logLength int32
 	gl.GetProgramiv(uint32(program), gl.INFO_LOG_LENGTH, &logLength)
 	info := strings.Repeat("\x00", int(logLength+1))
@@ -195,13 +183,13 @@ func (c *coreContext) GetProgramInfoLog(program Program) string {
 	return info
 }
 
-func (c *coreContext) GetShaderi(shader Shader, param uint32) int {
+func (c *coreContext) GetShaderi(shader context.Shader, param uint32) int {
 	var value int32
 	gl.GetShaderiv(uint32(shader), param, &value)
 	return int(value)
 }
 
-func (c *coreContext) GetShaderInfoLog(shader Shader) string {
+func (c *coreContext) GetShaderInfoLog(shader context.Shader) string {
 	var logLength int32
 	gl.GetShaderiv(uint32(shader), gl.INFO_LOG_LENGTH, &logLength)
 	info := strings.Repeat("\x00", int(logLength+1))
@@ -209,11 +197,11 @@ func (c *coreContext) GetShaderInfoLog(shader Shader) string {
 	return info
 }
 
-func (c *coreContext) GetUniformLocation(program Program, name string) Uniform {
-	return Uniform(gl.GetUniformLocation(uint32(program), gl.Str(name+"\x00")))
+func (c *coreContext) GetUniformLocation(program context.Program, name string) context.Uniform {
+	return context.Uniform(gl.GetUniformLocation(uint32(program), gl.Str(name+"\x00")))
 }
 
-func (c *coreContext) LinkProgram(program Program) {
+func (c *coreContext) LinkProgram(program context.Program) {
 	gl.LinkProgram(uint32(program))
 }
 
@@ -229,7 +217,7 @@ func (c *coreContext) Scissor(x, y, w, h int32) {
 	gl.Scissor(x, y, w, h)
 }
 
-func (c *coreContext) ShaderSource(shader Shader, source string) {
+func (c *coreContext) ShaderSource(shader context.Shader, source string) {
 	csources, free := gl.Strs(source + "\x00")
 	defer free()
 	gl.ShaderSource(uint32(shader), 1, csources, nil)
@@ -253,26 +241,26 @@ func (c *coreContext) TexParameteri(target, param uint32, value int32) {
 	gl.TexParameteri(target, param, value)
 }
 
-func (c *coreContext) Uniform1f(uniform Uniform, v float32) {
+func (c *coreContext) Uniform1f(uniform context.Uniform, v float32) {
 	gl.Uniform1f(int32(uniform), v)
 }
 
-func (c *coreContext) Uniform2f(uniform Uniform, v0, v1 float32) {
+func (c *coreContext) Uniform2f(uniform context.Uniform, v0, v1 float32) {
 	gl.Uniform2f(int32(uniform), v0, v1)
 }
-func (c *coreContext) Uniform3f(uniform Uniform, v mgl32.Vec3) {
+func (c *coreContext) Uniform3f(uniform context.Uniform, v mgl32.Vec3) {
 	gl.Uniform3f(int32(uniform), v[0], v[1], v[2])
 }
 
-func (c *coreContext) Uniform4f(uniform Uniform, v0, v1, v2, v3 float32) {
+func (c *coreContext) Uniform4f(uniform context.Uniform, v0, v1, v2, v3 float32) {
 	gl.Uniform4f(int32(uniform), v0, v1, v2, v3)
 }
 
-func (c *coreContext) UseProgram(program Program) {
+func (c *coreContext) UseProgram(program context.Program) {
 	gl.UseProgram(uint32(program))
 }
 
-func (c *coreContext) VertexAttribPointerWithOffset(attribute Attribute, size int, typ uint32, normalized bool, stride, offset int) {
+func (c *coreContext) VertexAttribPointerWithOffset(attribute context.Attribute, size int, typ uint32, normalized bool, stride, offset int) {
 	gl.VertexAttribPointerWithOffset(uint32(attribute), int32(size), typ, normalized, int32(stride), uintptr(offset))
 }
 
@@ -280,11 +268,11 @@ func (c *coreContext) Viewport(x, y, width, height int) {
 	gl.Viewport(int32(x), int32(y), int32(width), int32(height))
 }
 
-func (c *coreContext) UniformMatrix4fv(program Program, name string, mat4 mgl32.Mat4) {
+func (c *coreContext) UniformMatrix4fv(program context.Program, name string, mat4 mgl32.Mat4) {
 	gl.UniformMatrix4fv(int32(c.GetUniformLocation(program, name)), 1, false, &mat4[0])
 }
 
-func (c *coreContext) Uniform1i(program Program, name string, v0 int32) {
+func (c *coreContext) Uniform1i(program context.Program, name string, v0 int32) {
 	gl.Uniform1i(int32(c.GetUniformLocation(program, name)), v0)
 }
 
@@ -297,7 +285,7 @@ func (c *coreContext) DisableDepthTest() {
 	gl.Disable(gl.DEPTH_TEST)
 }
 
-func (c *coreContext) MakeVaoWithEbo(points []float32, indexs []uint32) (Buffer, Buffer) {
+func (c *coreContext) MakeVaoWithEbo(points []float32, indexs []uint32) (context.Buffer, context.Buffer) {
 	vbo := c.CreateBuffer()
 	gl.BindBuffer(gl.ARRAY_BUFFER, uint32(vbo))
 	c.BufferData(gl.ARRAY_BUFFER, points, gl.STATIC_DRAW)
@@ -310,10 +298,10 @@ func (c *coreContext) MakeVaoWithEbo(points []float32, indexs []uint32) (Buffer,
 	var vao uint32
 	gl.GenVertexArrays(1, &vao)
 	gl.BindVertexArray(vao)
-	return vbo, Buffer(ebo)
+	return vbo, context.Buffer(ebo)
 }
 
-func (c *coreContext) MakeVao(points []float32) Buffer {
+func (c *coreContext) MakeVao(points []float32) context.Buffer {
 	var vbo uint32
 
 	// 在显卡中开辟一块空间，创建顶点缓存对象，个数为1，变量vbo会被赋予一个ID值。
@@ -332,10 +320,10 @@ func (c *coreContext) MakeVao(points []float32) Buffer {
 	// 后面的两个函数都是要操作具体的vao的，因此需要先将vao绑定到opengl上。
 	// 解绑：gl.BindVertexArray(0)，opengl中很多的解绑操作都是传入0
 	gl.BindVertexArray(vao)
-	return Buffer(vbo)
+	return context.Buffer(vbo)
 }
 
-func (c *coreContext) MakeTexture(img image.Image, index uint32) Texture {
+func (c *coreContext) MakeTexture(img image.Image, index uint32) context.Texture {
 	rgba := image.NewRGBA(img.Bounds())
 	if rgba.Stride != rgba.Rect.Size().X*4 {
 		panic("unsupported stride")
@@ -352,7 +340,7 @@ func (c *coreContext) MakeTexture(img image.Image, index uint32) Texture {
 	gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST)
 	gl.TexImage2D(gl.TEXTURE_2D, 0, gl.RGBA, int32(rgba.Rect.Size().X), int32(rgba.Rect.Size().Y), 0, gl.RGBA, gl.UNSIGNED_BYTE, gl.Ptr(rgba.Pix))
 	gl.GenerateMipmap(gl.TEXTURE_2D)
-	return Texture(te)
+	return context.Texture(te)
 }
 
 func GetTextureByIndex(index int) uint32 {

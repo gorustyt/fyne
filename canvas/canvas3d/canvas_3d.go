@@ -23,7 +23,7 @@ func (c *Canvas3d) AppendObj(obj gl.Canvas3D) {
 	c.Objs = append(c.Objs, obj)
 }
 func (c *Canvas3d) SetShaderConfig(vertStr, fragStr string) {
-	c.VertStr, c.FragStr = vertStr, fragStr
+	c.ChangeShader(vertStr, fragStr)
 }
 func (c *Canvas3d) Reset() {
 	c.Objs = c.Objs[:0]

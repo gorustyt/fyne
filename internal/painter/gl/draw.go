@@ -1,6 +1,7 @@
 package gl
 
 import (
+	"github.com/gorustyt/fyne/v2/canvas/context"
 	"image/color"
 	"math"
 
@@ -9,7 +10,7 @@ import (
 	paint "github.com/gorustyt/fyne/v2/internal/painter"
 )
 
-func (p *painter) createBuffer(points []float32) Buffer {
+func (p *painter) createBuffer(points []float32) context.Buffer {
 	vbo := p.ctx.CreateBuffer()
 	p.logError()
 	p.ctx.BindBuffer(arrayBuffer, vbo)
@@ -19,7 +20,7 @@ func (p *painter) createBuffer(points []float32) Buffer {
 	return vbo
 }
 
-func (p *painter) defineVertexArray(prog Program, name string, size, stride, offset int) {
+func (p *painter) defineVertexArray(prog context.Program, name string, size, stride, offset int) {
 	vertAttrib := p.ctx.GetAttribLocation(prog, name)
 	p.ctx.EnableVertexAttribArray(vertAttrib)
 	p.ctx.VertexAttribPointerWithOffset(vertAttrib, size, float, false, stride*floatSize, offset*floatSize)
@@ -31,7 +32,7 @@ func (p *painter) drawCircle(circle *canvas.Circle, pos fyne.Position, frame fyn
 		1.0, paint.VectorPad(circle))
 }
 
-func (p *painter) drawGradient(o fyne.CanvasObject, texCreator func(fyne.CanvasObject) Texture, pos fyne.Position, frame fyne.Size) {
+func (p *painter) drawGradient(o fyne.CanvasObject, texCreator func(fyne.CanvasObject) context.Texture, pos fyne.Position, frame fyne.Size) {
 	p.drawTextureWithDetails(o, texCreator, pos, o.Size(), frame, canvas.ImageFillStretch, 1.0, 0)
 }
 
@@ -122,7 +123,7 @@ func (p *painter) drawRectangle(rect *canvas.Rectangle, pos fyne.Position, frame
 	}
 
 	roundedCorners := rect.CornerRadius != 0
-	var program Program
+	var program context.Program
 	if roundedCorners {
 		program = p.roundRectangleProgram
 	} else {
@@ -211,7 +212,7 @@ func (p *painter) drawText(text *canvas.Text, pos fyne.Position, frame fyne.Size
 	p.drawTextureWithDetails(text, p.newGlTextTexture, pos, size, frame, canvas.ImageFillStretch, 1.0, 0)
 }
 
-func (p *painter) drawTextureWithDetails(o fyne.CanvasObject, creator func(canvasObject fyne.CanvasObject) Texture,
+func (p *painter) drawTextureWithDetails(o fyne.CanvasObject, creator func(canvasObject fyne.CanvasObject) context.Texture,
 	pos fyne.Position, size, frame fyne.Size, fill canvas.ImageFill, alpha float32, pad float32) {
 
 	texture, err := p.getTexture(o, creator)
@@ -251,7 +252,7 @@ func (p *painter) drawTextureWithDetails(o fyne.CanvasObject, creator func(canva
 	p.freeBuffer(vbo)
 }
 
-func (p *painter) freeBuffer(vbo Buffer) {
+func (p *painter) freeBuffer(vbo context.Buffer) {
 	p.ctx.BindBuffer(arrayBuffer, noBuffer)
 	p.logError()
 	p.ctx.DeleteBuffer(vbo)

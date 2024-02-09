@@ -3,19 +3,20 @@ package gl
 import (
 	"github.com/gorustyt/fyne/v2"
 	"github.com/gorustyt/fyne/v2/canvas"
+	"github.com/gorustyt/fyne/v2/canvas/context"
 	"strings"
 )
 
 type Painter3D struct {
-	prog Program //sharder
-	context
+	prog context.Program //sharder
+	context.Context
 }
 
-func NewPainter3D(ctx context) *Painter3D {
-	return &Painter3D{context: ctx}
+func NewPainter3D(ctx context.Context) *Painter3D {
+	return &Painter3D{Context: ctx}
 }
 
-func (p *Painter3D) Program() Program {
+func (p *Painter3D) Program() context.Program {
 	return p.prog
 }
 
@@ -24,21 +25,21 @@ func (p *Painter3D) HasShader() bool {
 }
 
 func (p *Painter3D) DrawTrianglesByElement(index []uint32) {
-	p.context.DrawElementsArrays(triangles, index)
+	p.Context.DrawElementsArrays(triangles, index)
 }
 
 func (p *Painter3D) DrawTriangles(count int) {
-	p.context.DrawArrays(triangles, 0, count)
+	p.Context.DrawArrays(triangles, 0, count)
 }
 
 func (p *Painter3D) DefineVertexArray(name string, size, stride, offset int) {
 	vertAttrib := p.GetAttribLocation(p.prog, name)
-	p.context.EnableVertexAttribArray(vertAttrib)
+	p.Context.EnableVertexAttribArray(vertAttrib)
 	p.VertexAttribPointerWithOffset(vertAttrib, size, float, false, stride*floatSize, offset*floatSize)
 }
 
-func (p *Painter3D) BindTexture(texture Texture) {
-	p.context.BindTexture(texture2D, texture)
+func (p *Painter3D) BindTexture(texture context.Texture) {
+	p.Context.BindTexture(texture2D, texture)
 }
 
 type Canvas3D interface {
@@ -59,7 +60,7 @@ type Canvas3dObj struct {
 	Painter          *Painter3D
 	Objs             []Canvas3D
 	vertStr, fragStr string
-	proCache         map[string]Program
+	proCache         map[string]context.Program
 }
 
 func (c *Canvas3dObj) ChangeShader(vertStr, fragStr string) {
@@ -67,7 +68,10 @@ func (c *Canvas3dObj) ChangeShader(vertStr, fragStr string) {
 		return
 	}
 	oldId := strings.Join([]string{c.vertStr, c.fragStr}, ",")
-	oldPro := c.Painter.prog
+	var oldPro context.Program
+	if c.Painter != nil {
+		oldPro = c.Painter.prog
+	}
 	c.vertStr = vertStr
 	c.fragStr = fragStr
 	if oldId != "," {
@@ -182,5 +186,5 @@ func (c *Canvas3dObj) Refresh() {
 }
 
 func NewCustomObj() *Canvas3dObj {
-	return &Canvas3dObj{proCache: map[string]Program{}}
+	return &Canvas3dObj{proCache: map[string]context.Program{}}
 }

@@ -5,6 +5,7 @@ package gl
 
 import (
 	"encoding/binary"
+	"github.com/gorustyt/fyne/v2/canvas/context"
 
 	"github.com/fyne-io/gl-js"
 	"golang.org/x/mobile/exp/f32"
@@ -71,7 +72,7 @@ func (p *painter) Init() {
 
 type xjsContext struct{}
 
-var _ context = (*xjsContext)(nil)
+var _ context.context = (*xjsContext)(nil)
 
 func (c *xjsContext) ActiveTexture(textureUnit uint32) {
 	gl.ActiveTexture(gl.Enum(textureUnit))
