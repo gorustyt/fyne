@@ -154,66 +154,103 @@ func (c *Canvas3dObj) After() {
 	c.Painter.DisableDepthTest()
 }
 
-func (c *Canvas3dObj) Dragged(ev *fyne.DragEvent) {
-	for _, v := range c.Objs {
-		if p, ok := v.(fyne.Draggable); ok {
-			p.Dragged(ev)
-		}
-	}
-
-}
-func (c *Canvas3dObj) DragEnd() {
-	for _, v := range c.Objs {
-		if p, ok := v.(fyne.Draggable); ok {
-			p.DragEnd()
-		}
-	}
-	c.Refresh()
-}
-func (c *Canvas3dObj) Scrolled(ev *fyne.ScrollEvent) {
-	for _, v := range c.Objs {
-		if p, ok := v.(fyne.Scrollable); ok {
-			p.Scrolled(ev)
-		}
-	}
-	c.Refresh()
-}
-func (c *Canvas3dObj) Move(position fyne.Position) {
-
+type Canvas3dObjs struct {
+	objs []*Canvas3dObj
 }
 
-func (c *Canvas3dObj) Position() fyne.Position {
+func (c *Canvas3dObjs) GetCanvas3dObj(index int) *Canvas3dObj {
+	return c.objs[index]
+}
+
+func (c *Canvas3dObjs) RangeCanvas3dObj(fn func(obj *Canvas3dObj) (stop bool)) {
+	for _, v := range c.objs {
+		if fn(v) {
+			return
+		}
+	}
+}
+
+func (c *Canvas3dObjs) Dragged(ev *fyne.DragEvent) {
+	c.RangeCanvas3dObj(func(obj *Canvas3dObj) (stop bool) {
+		for _, v := range obj.Objs {
+			if p, ok := v.(fyne.Draggable); ok {
+				p.Dragged(ev)
+			}
+		}
+		return false
+	})
+
+}
+func (c *Canvas3dObjs) DragEnd() {
+	c.RangeCanvas3dObj(func(obj *Canvas3dObj) (stop bool) {
+		for _, v := range obj.Objs {
+			if p, ok := v.(fyne.Draggable); ok {
+				p.DragEnd()
+			}
+		}
+		c.Refresh()
+		return false
+	})
+}
+func (c *Canvas3dObjs) Scrolled(ev *fyne.ScrollEvent) {
+	c.RangeCanvas3dObj(func(obj *Canvas3dObj) (stop bool) {
+
+		for _, v := range obj.Objs {
+			if p, ok := v.(fyne.Scrollable); ok {
+				p.Scrolled(ev)
+			}
+		}
+		c.Refresh()
+		return false
+	})
+}
+func (c *Canvas3dObjs) Move(position fyne.Position) {
+
+}
+
+func (c *Canvas3dObjs) Position() fyne.Position {
 	return fyne.Position{}
 }
 
-func (c *Canvas3dObj) Hide() {
+func (c *Canvas3dObjs) Hide() {
 
 }
 
-func (c *Canvas3dObj) Visible() bool {
+func (c *Canvas3dObjs) Visible() bool {
 	return true
 }
 
-func (c *Canvas3dObj) Show() {
+func (c *Canvas3dObjs) Show() {
 
 }
 
-func (c *Canvas3dObj) MinSize() fyne.Size {
+func (c *Canvas3dObjs) MinSize() fyne.Size {
 	return fyne.Size{Width: 600, Height: 1080}
 }
 
-func (c *Canvas3dObj) Resize(size fyne.Size) {
+func (c *Canvas3dObjs) Resize(size fyne.Size) {
 
 }
 
-func (c *Canvas3dObj) Size() fyne.Size {
+func (c *Canvas3dObjs) Size() fyne.Size {
 	return fyne.Size{Width: 600, Height: 1080}
 }
 
-func (c *Canvas3dObj) Refresh() {
+func (c *Canvas3dObjs) Refresh() {
 	canvas.Refresh(c)
 }
 
 func NewCustomObj() *Canvas3dObj {
 	return &Canvas3dObj{proCache: map[string]context.Program{}}
+}
+
+func NewCustomObjs(n int) *Canvas3dObjs {
+	if n <= 0 {
+		n = 1
+	}
+	obj := &Canvas3dObjs{objs: make([]*Canvas3dObj, n)}
+	for i := range obj.objs {
+		obj.objs[i] = NewCustomObj()
+	}
+	return obj
 }

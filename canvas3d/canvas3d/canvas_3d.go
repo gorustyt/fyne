@@ -14,28 +14,35 @@ type ICanvas3d interface {
 	AppendRenderFunc(fn func(painter context.Painter))
 }
 type Canvas3d struct {
-	*gl.Canvas3dObj
+	*gl.Canvas3dObjs
 }
 
-func NewCanvas3d() *Canvas3d {
-	return &Canvas3d{Canvas3dObj: gl.NewCustomObj()}
+func NewCanvas3d(n int) *Canvas3d {
+	return &Canvas3d{Canvas3dObjs: gl.NewCustomObjs(n)}
 }
 
-func (c *Canvas3d) AppendRenderFunc(fn func(ctx context.Painter)) {
-	c.RenderFuncs = append(c.RenderFuncs, fn)
+func (c *Canvas3d) AppendRenderFunc(index int, fn func(ctx context.Painter)) {
+	obj := c.GetCanvas3dObj(index)
+	obj.RenderFuncs = append(obj.RenderFuncs, fn)
 }
 
-func (c *Canvas3d) AppendObj(obj gl.Canvas3D) {
-	c.Objs = append(c.Objs, obj)
+func (c *Canvas3d) AppendObj(index int, obj gl.Canvas3D) {
+	o := c.GetCanvas3dObj(index)
+	o.Objs = append(o.Objs, obj)
 }
-func (c *Canvas3d) SetShaderConfig(vertStr, fragStr string) {
-	c.ChangeShader(vertStr, fragStr)
+func (c *Canvas3d) SetShaderConfig(index int, vertStr, fragStr string) {
+	o := c.GetCanvas3dObj(index)
+	o.ChangeShader(vertStr, fragStr)
 }
 func (c *Canvas3d) Reset() {
-	c.Objs = c.Objs[:0]
-	c.RenderFuncs = c.RenderFuncs[:0]
+	c.RangeCanvas3dObj(func(obj *gl.Canvas3dObj) (stop bool) {
+		obj.Objs = obj.Objs[:0]
+		obj.RenderFuncs = obj.RenderFuncs[:0]
+		return false
+	})
+
 }
 
 func (c *Canvas3d) GetRenderObj() fyne.CanvasObject {
-	return c.Canvas3dObj
+	return c.Canvas3dObjs
 }

@@ -86,31 +86,32 @@ func (p *painter) drawObject(o fyne.CanvasObject, pos fyne.Position, frame fyne.
 		p.drawGradient(obj, p.newGlLinearGradientTexture, pos, frame)
 	case *canvas.RadialGradient:
 		p.drawGradient(obj, p.newGlRadialGradientTexture, pos, frame)
-	case *Canvas3dObj:
+	case *Canvas3dObjs:
 		p.drawCustomObj(obj, pos, frame)
 	}
 }
 
-func (p *painter) drawCustomObj(obj *Canvas3dObj, pos fyne.Position, frame fyne.Size) {
-
-	vertStr, fragStr := obj.GetShader()
-	if vertStr == "" || fragStr == "" {
-		return
-	}
-	if obj.Painter == nil {
-		pa := NewPainter3D(p.ctx)
-		obj.Painter = pa
-	}
-	if obj.Painter.prog == 0 {
-		obj.Painter.prog = p.createProgramWithShader([]byte(vertStr), []byte(fragStr))
-		obj.InitOnce()
-	}
-	p.ctx.UseProgram(obj.Painter.prog)
-	obj.Init()
-	obj.BeforeDraw(pos, frame)
-	obj.Draw(pos, frame)
-	obj.After()
-
+func (p *painter) drawCustomObj(o *Canvas3dObjs, pos fyne.Position, frame fyne.Size) {
+	o.RangeCanvas3dObj(func(obj *Canvas3dObj) (stop bool) {
+		vertStr, fragStr := obj.GetShader()
+		if vertStr == "" || fragStr == "" {
+			return
+		}
+		if obj.Painter == nil {
+			pa := NewPainter3D(p.ctx)
+			obj.Painter = pa
+		}
+		if obj.Painter.prog == 0 {
+			obj.Painter.prog = p.createProgramWithShader([]byte(vertStr), []byte(fragStr))
+			obj.InitOnce()
+		}
+		p.ctx.UseProgram(obj.Painter.prog)
+		obj.Init()
+		obj.BeforeDraw(pos, frame)
+		obj.Draw(pos, frame)
+		obj.After()
+		return false
+	})
 }
 
 func (p *painter) drawRaster(img *canvas.Raster, pos fyne.Position, frame fyne.Size) {
