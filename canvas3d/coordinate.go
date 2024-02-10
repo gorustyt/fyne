@@ -26,7 +26,7 @@ const (
 	Yaw       = -90.0
 	Pitch     = 0.0
 	Speed     = 3.0
-	Sensitivy = 0.1
+	Sensitivy = 0.01
 )
 
 const (
@@ -100,7 +100,7 @@ func (c *Coordinate) DragEnd() {
 	y := float32(math.Sin(mgl64.DegToRad(c.Pitch)))
 	z := float32(math.Sin(mgl64.DegToRad(c.Yaw)) * math.Cos(mgl64.DegToRad(c.Pitch)))
 	front := mgl32.Vec3{x, y, z}
-	front = front.Normalize()
+	c.Front = front.Normalize()
 	// Also re-calculate the Right and Up vector
 	// Normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
 	c.Right = front.Cross(c.WorldUp).Normalize()
