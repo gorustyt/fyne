@@ -2,7 +2,7 @@ package canvas3d
 
 import (
 	"github.com/gorustyt/fyne/v2"
-	"github.com/gorustyt/fyne/v2/canvas/context"
+	"github.com/gorustyt/fyne/v2/canvas3d/context"
 	"github.com/gorustyt/fyne/v2/internal/painter/gl"
 )
 

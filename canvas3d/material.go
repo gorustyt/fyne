@@ -23,13 +23,13 @@ func (m *Material) InitOnce(p *gl.Painter3D) {
 }
 
 func (m *Material) Init(p *gl.Painter3D) {
-	p.Uniform3f(p.GetUniformLocation(p.Program(), "material.ambient"), m.Ambient)
-	p.Uniform3f(p.GetUniformLocation(p.Program(), "material.diffuse"), m.Diffuse)
-	p.Uniform3f(p.GetUniformLocation(p.Program(), "material.specular"), m.Specular)
+	p.UniformVec3("material.ambient", m.Ambient)
+	p.UniformVec3("material.diffuse", m.Diffuse)
+	p.UniformVec3("material.specular", m.Specular)
 
-	p.Uniform1f(p.GetUniformLocation(p.Program(), "material.ambient_strength"), m.AmbientStrength)
-	p.Uniform1f(p.GetUniformLocation(p.Program(), "material.diffuse_strength"), m.DiffuseStrength)
-	p.Uniform1f(p.GetUniformLocation(p.Program(), "material.specular_strength"), m.SpecularStrength)
+	p.Uniform1f("material.ambient_strength", m.AmbientStrength)
+	p.Uniform1f("material.diffuse_strength", m.DiffuseStrength)
+	p.Uniform1f("material.specular_strength", m.SpecularStrength)
 }
 
 func (m *Material) After(p *gl.Painter3D) {

@@ -4,6 +4,7 @@ import "C"
 import (
 	"github.com/go-gl/mathgl/mgl64"
 	"github.com/gorustyt/fyne/v2"
+	"github.com/gorustyt/fyne/v2/canvas3d/context"
 	"math"
 
 	"github.com/go-gl/mathgl/mgl32"
@@ -58,10 +59,10 @@ func (c *Coordinate) UpdateFrameSize(frameSize fyne.Size) {
 
 }
 
-func (c *Coordinate) BeforeDraw(p *gl.Painter3D, pos fyne.Position, frame fyne.Size) {
+func (c *Coordinate) BeforeDraw(p context.Painter, pos fyne.Position, frame fyne.Size) {
 	c.UpdateFrameSize(frame)
 	project := mgl32.Perspective(mgl32.DegToRad(c.Fov), frame.Width/frame.Height, c.Near, c.Far)
-	p.UniformMatrix4fv(p.Program(), ProjectName, project)
+	p.UniformMatrix4fv(ProjectName, project)
 }
 
 func (c *Coordinate) Dragged(event *fyne.DragEvent) {
@@ -125,8 +126,8 @@ func (c *Coordinate) InitOnce(p *gl.Painter3D) {
 }
 
 func (c *Coordinate) Init(p *gl.Painter3D) {
-	p.UniformMatrix4fv(p.Program(), ViewName, c.GetView())
-	p.UniformMatrix4fv(p.Program(), ModelName, c.mat)
+	p.UniformMatrix4fv(ViewName, c.GetView())
+	p.UniformMatrix4fv(ModelName, c.mat)
 }
 
 func (c *Coordinate) After(p *gl.Painter3D) {

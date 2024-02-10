@@ -2,7 +2,7 @@ package canvas3d
 
 import (
 	"github.com/gorustyt/fyne/v2"
-	"github.com/gorustyt/fyne/v2/canvas/context"
+	"github.com/gorustyt/fyne/v2/canvas3d/context"
 	"github.com/gorustyt/fyne/v2/internal/painter/gl"
 )
 
@@ -11,7 +11,7 @@ type ICanvas3d interface {
 	AppendObj(obj gl.Canvas3D)
 	Reset()
 	GetRenderObj() fyne.CanvasObject
-	AppendRenderFunc(fn func(prog context.Program, ctx context.Context))
+	AppendRenderFunc(fn func(painter context.Painter))
 }
 type Canvas3d struct {
 	*gl.Canvas3dObj
@@ -21,7 +21,7 @@ func NewCanvas3d() *Canvas3d {
 	return &Canvas3d{Canvas3dObj: gl.NewCustomObj()}
 }
 
-func (c *Canvas3d) AppendRenderFunc(fn func(prog context.Program, ctx context.Context)) {
+func (c *Canvas3d) AppendRenderFunc(fn func(ctx context.Painter)) {
 	c.RenderFuncs = append(c.RenderFuncs, fn)
 }
 

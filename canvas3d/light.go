@@ -22,7 +22,7 @@ type Light struct {
 
 func (m *Light) Init(p *gl.Painter3D) {
 	m.Material.Init(p)
-	p.Uniform3f(p.GetUniformLocation(p.Program(), LightDirection), m.Position)
+	p.UniformVec3(LightDirection, m.Position)
 }
 
 func (m *Light) After(p *gl.Painter3D) {
@@ -49,10 +49,10 @@ func NewPointLight() *PointLight {
 }
 func (m *PointLight) Init(p *gl.Painter3D) {
 	m.Light.Init(p)
-	p.Uniform1f(p.GetUniformLocation(p.Program(), LightConstant), m.Constant)
-	p.Uniform1f(p.GetUniformLocation(p.Program(), LightLinear), m.Linear)
-	p.Uniform1f(p.GetUniformLocation(p.Program(), LightQuadratic), m.Quadratic)
-	p.Uniform3f(p.GetUniformLocation(p.Program(), LightPosition), m.Position)
+	p.Uniform1f(LightConstant, m.Constant)
+	p.Uniform1f(LightLinear, m.Linear)
+	p.Uniform1f(LightQuadratic, m.Quadratic)
+	p.UniformVec3(LightPosition, m.Position)
 }
 
 func (m *PointLight) After(p *gl.Painter3D) {
@@ -71,8 +71,8 @@ func NewSpotLight() *SpotLight {
 }
 func (m *SpotLight) Init(p *gl.Painter3D) {
 	m.Light.Init(p)
-	p.Uniform1f(p.GetUniformLocation(p.Program(), LightCutOff), m.CutOff)
-	p.Uniform3f(p.GetUniformLocation(p.Program(), LightPosition), m.Position)
+	p.Uniform1f(LightCutOff, m.CutOff)
+	p.UniformVec3(LightPosition, m.Position)
 }
 
 func (m *SpotLight) After(p *gl.Painter3D) {

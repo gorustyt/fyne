@@ -1,9 +1,10 @@
 package gl
 
 import (
+	"github.com/go-gl/mathgl/mgl32"
 	"github.com/gorustyt/fyne/v2"
 	"github.com/gorustyt/fyne/v2/canvas"
-	"github.com/gorustyt/fyne/v2/canvas/context"
+	"github.com/gorustyt/fyne/v2/canvas3d/context"
 	"strings"
 )
 
@@ -14,10 +15,6 @@ type Painter3D struct {
 
 func NewPainter3D(ctx context.Context) *Painter3D {
 	return &Painter3D{Context: ctx}
-}
-
-func (p *Painter3D) Program() context.Program {
-	return p.prog
 }
 
 func (p *Painter3D) HasShader() bool {
@@ -42,6 +39,34 @@ func (p *Painter3D) BindTexture(texture context.Texture) {
 	p.Context.BindTexture(texture2D, texture)
 }
 
+func (p *Painter3D) UniformMatrix4fv(name string, mat4 mgl32.Mat4) {
+	p.Context.UniformMatrix4fv(p.prog, name, mat4)
+}
+
+func (p *Painter3D) Uniform1i(name string, v0 int32) {
+	p.Context.Uniform1i(p.prog, name, v0)
+}
+
+func (p *Painter3D) Uniform1f(name string, v float32) {
+	p.Context.Uniform1f(p.GetUniformLocation(p.prog, name), v)
+}
+
+func (p *Painter3D) Uniform2f(name string, v0, v1 float32) {
+	p.Context.Uniform2f(p.GetUniformLocation(p.prog, name), v0, v1)
+}
+
+func (p *Painter3D) UniformVec3(name string, vec3 mgl32.Vec3) {
+	p.Context.Uniform3f(p.GetUniformLocation(p.prog, name), vec3)
+}
+
+func (p *Painter3D) Uniform3f(name string, v0, v1, v2 float32) {
+	p.Context.Uniform3f(p.GetUniformLocation(p.prog, name), mgl32.Vec3{v0, v1, v2})
+}
+
+func (p *Painter3D) Uniform4f(name string, v0, v1, v2, v3 float32) {
+	p.Context.Uniform4f(p.GetUniformLocation(p.prog, name), v0, v1, v2, v3)
+}
+
 type Canvas3D interface {
 	InitOnce(p *Painter3D)
 	Init(p *Painter3D)
@@ -49,7 +74,7 @@ type Canvas3D interface {
 }
 
 type Canvas3DBeforePainter interface {
-	BeforeDraw(p *Painter3D, pos fyne.Position, Frame fyne.Size)
+	BeforeDraw(p context.Painter, pos fyne.Position, Frame fyne.Size)
 }
 
 type Canvas3DPainter interface {
@@ -59,7 +84,7 @@ type Canvas3DPainter interface {
 type Canvas3dObj struct {
 	Painter          *Painter3D
 	Objs             []Canvas3D
-	RenderFuncs      []func(prog context.Program, ctx context.Context)
+	RenderFuncs      []func(ctx context.Painter)
 	vertStr, fragStr string
 	proCache         map[string]context.Program
 }
@@ -102,7 +127,7 @@ func (c *Canvas3dObj) Init() {
 		v.Init(c.Painter)
 	}
 	for _, v := range c.RenderFuncs {
-		v(c.Painter.prog, c.Painter.Context)
+		v(c.Painter)
 	}
 }
 

@@ -1,7 +1,7 @@
 package gl
 
 import (
-	"github.com/gorustyt/fyne/v2/canvas/context"
+	"github.com/gorustyt/fyne/v2/canvas3d/context"
 	"image/color"
 	"math"
 

@@ -2,7 +2,7 @@ package canvas3d
 
 import (
 	"fmt"
-	"github.com/gorustyt/fyne/v2/canvas/context"
+	"github.com/gorustyt/fyne/v2/canvas3d/context"
 	"github.com/gorustyt/fyne/v2/internal/painter/gl"
 	"image"
 	"os"
@@ -27,11 +27,11 @@ func NewTexture() *Texture {
 }
 func (tex *Texture) Init(p *gl.Painter3D) {
 	for i, v := range tex.tex {
-		p.Uniform1i(p.Program(), fmt.Sprintf("texture%v", i+1), int32(i))
+		p.Uniform1i(fmt.Sprintf("texture%v", i+1), int32(i))
 		p.ActiveTexture(gl.GetTextureByIndex(i))
 		p.BindTexture(v)
 	}
-	p.Uniform1f(p.GetUniformLocation(p.Program(), "mixParams"), tex.MixParams)
+	p.Uniform1f("mixParams", tex.MixParams)
 }
 
 func (tex *Texture) After(p *gl.Painter3D) {

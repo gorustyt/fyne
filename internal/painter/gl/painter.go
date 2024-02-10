@@ -3,7 +3,7 @@ package gl
 
 import (
 	"fmt"
-	"github.com/gorustyt/fyne/v2/canvas/context"
+	"github.com/gorustyt/fyne/v2/canvas3d/context"
 	"image"
 
 	"github.com/gorustyt/fyne/v2"

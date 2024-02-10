@@ -5,7 +5,7 @@ package gl
 
 import (
 	"github.com/go-gl/mathgl/mgl32"
-	"github.com/gorustyt/fyne/v2/canvas/context"
+	"github.com/gorustyt/fyne/v2/canvas3d/context"
 	"image"
 	"image/draw"
 	"strings"
