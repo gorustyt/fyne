@@ -7,11 +7,12 @@ import (
 )
 
 type ICanvas3d interface {
-	SetShaderConfig(vertStr, fragStr string)
-	AppendObj(obj gl.Canvas3D)
+	SetShaderConfig(index int, vertStr, fragStr string)
+	AppendObj(index int, obj gl.Canvas3D)
 	Reset()
 	GetRenderObj() fyne.CanvasObject
-	AppendRenderFunc(fn func(painter context.Painter))
+	AppendRenderFunc(index int, fn func(painter context.Painter))
+	fyne.CanvasObject
 }
 type Canvas3d struct {
 	*gl.Canvas3dObjs
@@ -30,10 +31,12 @@ func (c *Canvas3d) AppendObj(index int, obj gl.Canvas3D) {
 	o := c.GetCanvas3dObj(index)
 	o.Objs = append(o.Objs, obj)
 }
+
 func (c *Canvas3d) SetShaderConfig(index int, vertStr, fragStr string) {
 	o := c.GetCanvas3dObj(index)
 	o.ChangeShader(vertStr, fragStr)
 }
+
 func (c *Canvas3d) Reset() {
 	c.RangeCanvas3dObj(func(obj *gl.Canvas3dObj) (stop bool) {
 		obj.Objs = obj.Objs[:0]
