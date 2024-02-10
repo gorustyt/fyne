@@ -127,7 +127,7 @@ func (c *Coordinate) InitOnce(p *gl.Painter3D) {
 
 func (c *Coordinate) Init(p *gl.Painter3D) {
 	p.UniformMatrix4fv(ViewName, c.GetView())
-	p.UniformMatrix4fv(ModelName, c.mat)
+	p.UniformMatrix4fv(ModelName, c.GetModel())
 }
 
 func (c *Coordinate) After(p *gl.Painter3D) {
@@ -206,26 +206,35 @@ type ProjectConfig struct {
 }
 
 type ModelConfig struct {
-	mat mgl32.Mat4
+	Model     mgl32.Mat4
+	translate mgl32.Mat4
+	scale     mgl32.Mat4
+	rotate    mgl32.Mat4
 }
 
 func NewModelConfig() *ModelConfig {
 	return &ModelConfig{
-		mat: mgl32.Ident4(),
+		Model:     mgl32.Ident4(),
+		translate: mgl32.Ident4(),
+		scale:     mgl32.Ident4(),
+		rotate:    mgl32.Ident4(),
 	}
 }
+func (m *ModelConfig) GetModel() mgl32.Mat4 {
+	return m.Model.Mul4(m.translate).Mul4(m.scale).Mul4(m.rotate)
+}
 func (m *ModelConfig) TranslateXYZ(x, y, z float32) {
-	m.mat = m.mat.Mul4(mgl32.Translate3D(x, y, z))
+	m.translate = mgl32.Translate3D(x, y, z)
 }
 
 func (m *ModelConfig) TranslateVec3(vec mgl32.Vec3) {
-	m.mat = m.mat.Mul4(mgl32.Translate3D(vec.X(), vec.Y(), vec.Z()))
+	m.translate = mgl32.Translate3D(vec.X(), vec.Y(), vec.Z())
 }
 
 func (m *ModelConfig) Rotate(angle float32, axis mgl32.Vec3) {
-	m.mat = m.mat.Mul4(mgl32.HomogRotate3D(mgl32.DegToRad(angle), axis))
+	m.rotate = mgl32.HomogRotate3D(mgl32.DegToRad(angle), axis)
 }
 
 func (m *ModelConfig) Scale(x, y, z float32) {
-	m.mat = m.mat.Mul4(mgl32.Scale3D(x, y, z))
+	m.scale = mgl32.Scale3D(x, y, z)
 }
