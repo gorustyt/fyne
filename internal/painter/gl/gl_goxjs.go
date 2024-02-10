@@ -5,7 +5,7 @@ package gl
 
 import (
 	"encoding/binary"
-	"github.com/gorustyt/fyne/v2/canvas/context"
+	"github.com/gorustyt/fyne/v2/canvas3d/context"
 
 	"github.com/fyne-io/gl-js"
 	"golang.org/x/mobile/exp/f32"

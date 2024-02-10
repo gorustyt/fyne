@@ -7,7 +7,7 @@ package gl
 import (
 	"encoding/binary"
 	"fmt"
-	"github.com/gorustyt/fyne/v2/canvas/context"
+	"github.com/gorustyt/fyne/v2/canvas3d/context"
 	"math"
 
 	"github.com/gorustyt/fyne/v2/internal/driver/mobile/gl"

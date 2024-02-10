@@ -11,7 +11,7 @@
 package gl
 
 import (
-	"github.com/gorustyt/fyne/v2/canvas/context"
+	"github.com/gorustyt/fyne/v2/canvas3d/context"
 	"strings"
 
 	gl "github.com/go-gl/gl/v3.1/gles2"
