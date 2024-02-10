@@ -18,7 +18,7 @@ type Canvas3d struct {
 	*gl.Canvas3dObjs
 }
 
-func NewCanvas3d(n int) *Canvas3d {
+func NewCanvas3d(n int) ICanvas3d {
 	return &Canvas3d{Canvas3dObjs: gl.NewCustomObjs(n)}
 }
 
@@ -45,7 +45,9 @@ func (c *Canvas3d) Reset() {
 	})
 
 }
-
+func (c *Canvas3d) Refresh() {
+	c.Canvas3dObjs.Refresh()
+}
 func (c *Canvas3d) GetRenderObj() fyne.CanvasObject {
 	return c.Canvas3dObjs
 }
