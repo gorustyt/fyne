@@ -46,9 +46,12 @@ func (tex *Texture) Init(p *gl.Painter3D) {
 func (tex *Texture) After(p *gl.Painter3D) {
 
 }
-func (tex *Texture) AppendCustomAttr(attr string) {
+
+func (tex *Texture) AppendPathWithCustomAttr(attr string, p string) {
+	tex.paths = append(tex.paths, p)
 	tex.customAttrs = append(tex.customAttrs, attr)
 }
+
 func (tex *Texture) AppendPath(p string) {
 	tex.paths = append(tex.paths, p)
 }

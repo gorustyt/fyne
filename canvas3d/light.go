@@ -6,12 +6,13 @@ import (
 )
 
 const (
-	LightConstant  = "light.constant"
-	LightLinear    = "light.linear"
-	LightQuadratic = "light.quadratic"
-	LightCutOff    = "light.cutOff"
-	LightDirection = "light.direction"
-	LightPosition  = "light.position"
+	LightConstant    = "light.constant"
+	LightLinear      = "light.linear"
+	LightQuadratic   = "light.quadratic"
+	LightCutOff      = "light.cutOff"
+	LightOuterCutOff = "light.outerCutOff"
+	LightDirection   = "light.direction"
+	LightPosition    = "light.position"
 )
 
 type Light struct {
@@ -63,7 +64,8 @@ func (m *PointLight) After(p *gl.Painter3D) {
 
 type SpotLight struct {
 	*Light
-	CutOff float32
+	CutOff      float32
+	OuterCutOff float32
 }
 
 func NewSpotLight() *SpotLight {
@@ -74,6 +76,7 @@ func NewSpotLight() *SpotLight {
 func (m *SpotLight) Init(p *gl.Painter3D) {
 	m.Light.Init(p)
 	p.Uniform1f(LightCutOff, m.CutOff)
+	p.Uniform1f(LightOuterCutOff, m.OuterCutOff)
 }
 
 func (m *SpotLight) After(p *gl.Painter3D) {
