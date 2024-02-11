@@ -3,6 +3,7 @@ package canvas3d
 import (
 	"github.com/gorustyt/fyne/v2"
 	"github.com/gorustyt/fyne/v2/canvas3d/context"
+	"github.com/gorustyt/fyne/v2/internal/driver/glfw"
 	"github.com/gorustyt/fyne/v2/internal/painter/gl"
 )
 
@@ -20,6 +21,10 @@ type Canvas3d struct {
 
 func NewCanvas3d(n int) ICanvas3d {
 	return &Canvas3d{Canvas3dObjs: gl.NewCustomObjs(n)}
+}
+
+func GetGlfwTime() float64 {
+	return glfw.GetGlfwTime()
 }
 
 func (c *Canvas3d) AppendRenderFunc(index int, fn func(ctx context.Painter)) {

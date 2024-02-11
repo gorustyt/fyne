@@ -14,3 +14,7 @@ func initWindowHints() {
 
 	glfw.WindowHint(glfw.CocoaGraphicsSwitching, glfw.True)
 }
+
+func GetGlfwTime() float64 {
+	return glfw.GetTime()
+}

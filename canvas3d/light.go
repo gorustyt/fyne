@@ -22,7 +22,7 @@ type Light struct {
 
 func (m *Light) Init(p *gl.Painter3D) {
 	m.Material.Init(p)
-	p.UniformVec3(LightDirection, m.Position)
+	p.UniformVec3(LightPosition, m.Position)
 }
 
 func (m *Light) After(p *gl.Painter3D) {
@@ -30,9 +30,11 @@ func (m *Light) After(p *gl.Painter3D) {
 }
 
 func NewLight() *Light {
-	return &Light{
+	l := &Light{
 		Material: NewMaterial(),
 	}
+	l.Name = "light"
+	return l
 }
 
 type PointLight struct {
