@@ -17,12 +17,19 @@ const (
 type Light struct {
 	Position  mgl32.Vec3
 	Direction mgl32.Vec3
+	Constant  float32
+	Linear    float32
+	Quadratic float32
 	*Material
 }
 
 func (m *Light) Init(p *gl.Painter3D) {
 	m.Material.Init(p)
 	p.UniformVec3(LightPosition, m.Position)
+	p.UniformVec3(LightDirection, m.Direction)
+	p.Uniform1f(LightConstant, m.Constant)
+	p.Uniform1f(LightLinear, m.Linear)
+	p.Uniform1f(LightQuadratic, m.Quadratic)
 }
 
 func (m *Light) After(p *gl.Painter3D) {
@@ -39,9 +46,6 @@ func NewLight() *Light {
 
 type PointLight struct {
 	*Light
-	Constant  float32
-	Linear    float32
-	Quadratic float32
 }
 
 func NewPointLight() *PointLight {
@@ -51,10 +55,6 @@ func NewPointLight() *PointLight {
 }
 func (m *PointLight) Init(p *gl.Painter3D) {
 	m.Light.Init(p)
-	p.Uniform1f(LightConstant, m.Constant)
-	p.Uniform1f(LightLinear, m.Linear)
-	p.Uniform1f(LightQuadratic, m.Quadratic)
-	p.UniformVec3(LightPosition, m.Position)
 }
 
 func (m *PointLight) After(p *gl.Painter3D) {
@@ -74,7 +74,6 @@ func NewSpotLight() *SpotLight {
 func (m *SpotLight) Init(p *gl.Painter3D) {
 	m.Light.Init(p)
 	p.Uniform1f(LightCutOff, m.CutOff)
-	p.UniformVec3(LightPosition, m.Position)
 }
 
 func (m *SpotLight) After(p *gl.Painter3D) {
