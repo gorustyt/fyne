@@ -1,4 +1,4 @@
-package canvas3d
+package canvas3d_render
 
 import (
 	"github.com/gorustyt/fyne/v2"

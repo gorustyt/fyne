@@ -11,9 +11,10 @@ import (
 var _ gl.Canvas3D = (*Texture)(nil)
 
 type Texture struct {
-	paths     []string
-	tex       []context.Texture
-	MixParams float32
+	paths       []string
+	tex         []context.Texture
+	customAttrs []string
+	MixParams   float32
 }
 
 func (tex *Texture) InitOnce(p *gl.Painter3D) {
@@ -26,10 +27,18 @@ func NewTexture() *Texture {
 	}
 }
 func (tex *Texture) Init(p *gl.Painter3D) {
-	for i, v := range tex.tex {
-		p.Uniform1i(fmt.Sprintf("texture%v", i+1), int32(i))
-		p.ActiveTexture(gl.GetTextureByIndex(i))
-		p.BindTexture(v)
+	if len(tex.customAttrs) > 0 {
+		for i, v := range tex.customAttrs {
+			p.Uniform1i(v, int32(i))
+			p.ActiveTexture(gl.GetTextureByIndex(i))
+			p.BindTexture(tex.tex[i])
+		}
+	} else {
+		for i, v := range tex.tex {
+			p.Uniform1i(fmt.Sprintf("texture%v", i+1), int32(i))
+			p.ActiveTexture(gl.GetTextureByIndex(i))
+			p.BindTexture(v)
+		}
 	}
 	p.Uniform1f("mixParams", tex.MixParams)
 }
@@ -37,7 +46,9 @@ func (tex *Texture) Init(p *gl.Painter3D) {
 func (tex *Texture) After(p *gl.Painter3D) {
 
 }
-
+func (tex *Texture) AppendCustomAttr(attr string) {
+	tex.customAttrs = append(tex.customAttrs, attr)
+}
 func (tex *Texture) AppendPath(p string) {
 	tex.paths = append(tex.paths, p)
 }

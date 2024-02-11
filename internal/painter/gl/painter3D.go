@@ -18,7 +18,7 @@ func NewPainter3D(ctx context.Context) *Painter3D {
 }
 
 func (p *Painter3D) HasShader() bool {
-	return p.prog == 0
+	return p.prog != 0
 }
 
 func (p *Painter3D) DrawTrianglesByElement(index []uint32) {
