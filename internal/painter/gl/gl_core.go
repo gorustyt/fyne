@@ -10,7 +10,7 @@ import (
 	"image/draw"
 	"strings"
 
-	"github.com/go-gl/gl/v4.2-core/gl"
+	"github.com/go-gl/gl/v4.2-compatibility/gl"
 
 	"github.com/gorustyt/fyne/v2"
 )
@@ -369,4 +369,37 @@ func GetTextureByIndex(index int) uint32 {
 		return gl.TEXTURE10
 	}
 	return 0
+}
+
+func (c *coreContext) ExtBegin(mode uint32) {
+	gl.Begin(mode)
+}
+
+func (c *coreContext) ExtEnd() {
+	gl.End()
+}
+
+func (c *coreContext) ExtColor3f(r, g, b float32) {
+	gl.Color3f(r, g, b)
+}
+
+func (c *coreContext) ExtColor3fV(vec3 mgl32.Vec3) {
+	gl.Color3fv(&vec3[0])
+}
+
+func (c *coreContext) ExtPointSize(size float32) {
+	gl.PointSize(size)
+}
+
+func (c *coreContext) ExtLineWidth(width float32) {
+	gl.LineWidth(width)
+}
+func (c *coreContext) ExtFlush() {}
+
+func (c *coreContext) ExtVertex3f(x, y, z float32) {
+	gl.Vertex3f(x, y, z)
+}
+
+func (c *coreContext) ExtVertex3fV(vec3 mgl32.Vec3) {
+	gl.Vertex3fv(&vec3[0])
 }
