@@ -21,6 +21,10 @@ type VertexFloat32Array struct {
 	vbo, veo     context.Buffer
 }
 
+func (v *VertexFloat32Array) NeedShader() bool {
+	return true
+}
+
 func (v *VertexFloat32Array) InitOnce(p *gl.Painter3D) {
 
 }

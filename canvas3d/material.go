@@ -23,6 +23,10 @@ type Material struct {
 	SpecularStrength float32
 }
 
+func (m *Material) NeedShader() bool {
+	return true
+}
+
 func (m *Material) InitOnce(p *gl.Painter3D) {
 
 }

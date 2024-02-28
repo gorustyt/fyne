@@ -11,13 +11,15 @@ import (
 type Painter3D struct {
 	prog context.Program //sharder
 	context.Context
+	mode int
 }
 
 func NewPainter3D(ctx context.Context) *Painter3D {
+
 	return &Painter3D{Context: ctx}
 }
 
-func (p *Painter3D) HasShader() bool {
+func (p *Painter3D) HasInit() bool {
 	return p.prog != 0
 }
 
@@ -71,6 +73,7 @@ type Canvas3D interface {
 	InitOnce(p *Painter3D)
 	Init(p *Painter3D)
 	After(p *Painter3D)
+	NeedShader() bool
 }
 
 type Canvas3DBeforePainter interface {
@@ -87,6 +90,17 @@ type Canvas3dObj struct {
 	RenderFuncs      []func(ctx context.Painter)
 	vertStr, fragStr string
 	proCache         map[string]context.Program
+}
+
+func (c *Canvas3dObj) SplitByNeedShader() (needs []Canvas3D, notNeeds []Canvas3D) {
+	for _, v := range c.Objs {
+		if v.NeedShader() {
+			needs = append(needs, v)
+		} else {
+			notNeeds = append(notNeeds, v)
+		}
+	}
+	return
 }
 
 func (c *Canvas3dObj) ChangeShader(vertStr, fragStr string) {

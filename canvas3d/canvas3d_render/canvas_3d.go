@@ -10,8 +10,10 @@ import (
 type ICanvas3d interface {
 	SetShaderConfig(index int, vertStr, fragStr string)
 	AppendObj(index int, obj gl.Canvas3D)
+	AppendDefaultObj(obj gl.Canvas3D)
 	Reset()
 	GetRenderObj() fyne.CanvasObject
+	AppendDefaultRenderFunc(index int, fn func(ctx context.Painter))
 	AppendRenderFunc(index int, fn func(painter context.Painter))
 	fyne.CanvasObject
 }
@@ -19,8 +21,15 @@ type Canvas3d struct {
 	*gl.Canvas3dObjs
 }
 
-func NewCanvas3d(n int) ICanvas3d {
-	return &Canvas3d{Canvas3dObjs: gl.NewCustomObjs(n)}
+func NewCanvas3d(n ...int) ICanvas3d {
+	num := 1
+	if len(n) > 0 {
+		num = n[0]
+	}
+	if num <= 0 {
+		num = 1
+	}
+	return &Canvas3d{Canvas3dObjs: gl.NewCustomObjs(num)}
 }
 
 func GetGlfwTime() float64 {
@@ -30,6 +39,14 @@ func GetGlfwTime() float64 {
 func (c *Canvas3d) AppendRenderFunc(index int, fn func(ctx context.Painter)) {
 	obj := c.GetCanvas3dObj(index)
 	obj.RenderFuncs = append(obj.RenderFuncs, fn)
+}
+
+func (c *Canvas3d) AppendDefaultRenderFunc(index int, fn func(ctx context.Painter)) {
+	c.AppendRenderFunc(1, fn)
+}
+
+func (c *Canvas3d) AppendDefaultObj(obj gl.Canvas3D) {
+	c.AppendObj(1, obj)
 }
 
 func (c *Canvas3d) AppendObj(index int, obj gl.Canvas3D) {

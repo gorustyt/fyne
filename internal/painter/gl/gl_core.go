@@ -379,12 +379,19 @@ func (c *coreContext) ExtEnd() {
 	gl.End()
 }
 
-func (c *coreContext) ExtColor3f(r, g, b float32) {
-	gl.Color3f(r, g, b)
+func (c *coreContext) ExtColor4ub(r, g, b, a uint8) {
+	gl.Color4ub(r, g, b, a)
+}
+
+func (c *coreContext) ExtColor4ubv(v []uint8) {
+	gl.Color4ubv(&v[0])
 }
 
 func (c *coreContext) ExtColor3fV(vec3 mgl32.Vec3) {
 	gl.Color3fv(&vec3[0])
+}
+func (c *coreContext) ExtColor3f(r, g, b float32) {
+	gl.Color3f(r, g, b)
 }
 
 func (c *coreContext) ExtPointSize(size float32) {
@@ -394,7 +401,9 @@ func (c *coreContext) ExtPointSize(size float32) {
 func (c *coreContext) ExtLineWidth(width float32) {
 	gl.LineWidth(width)
 }
-func (c *coreContext) ExtFlush() {}
+func (c *coreContext) ExtFlush() {
+	gl.Flush()
+}
 
 func (c *coreContext) ExtVertex3f(x, y, z float32) {
 	gl.Vertex3f(x, y, z)
@@ -402,4 +411,33 @@ func (c *coreContext) ExtVertex3f(x, y, z float32) {
 
 func (c *coreContext) ExtVertex3fV(vec3 mgl32.Vec3) {
 	gl.Vertex3fv(&vec3[0])
+}
+
+const (
+	Lines    = gl.LINES
+	Points   = gl.POINTS
+	Fog      = gl.FOG
+	FogMode  = gl.FOG_MODE
+	FogStart = gl.FOG_START
+	FogEnd   = gl.FOG_END
+	FogColor = gl.FOG_COLOR
+	CullFace = gl.CULL_FACE
+	Lequal   = gl.LEQUAL
+	Linear   = gl.LINEAR
+)
+
+func (c *coreContext) ExtFogi(panme uint32, v int32) {
+	gl.Fogi(panme, v)
+}
+
+func (c *coreContext) ExtFogiv(panme uint32, v []int32) {
+	gl.Fogiv(panme, &v[0])
+}
+
+func (c *coreContext) ExtFogf(panme uint32, v float32) {
+	gl.Fogf(panme, v)
+}
+
+func (c *coreContext) ExtFogfv(panme uint32, v mgl32.Vec4) {
+	gl.Fogfv(panme, &v[0])
 }

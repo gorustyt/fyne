@@ -49,6 +49,10 @@ type Coordinate struct {
 	firstMouse bool
 }
 
+func (c *Coordinate) NeedShader() bool {
+	return true
+}
+
 func (c *Coordinate) UpdateFrameSize(frameSize fyne.Size) {
 	if c.frameSize != frameSize {
 		c.frameSize = frameSize

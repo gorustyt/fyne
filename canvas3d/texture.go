@@ -15,6 +15,11 @@ type Texture struct {
 	tex         []context.Texture
 	customAttrs []string
 	MixParams   float32
+	imgs        map[int]image.Image
+}
+
+func (tex *Texture) NeedShader() bool {
+	return true
 }
 
 func (tex *Texture) InitOnce(p *gl.Painter3D) {
@@ -24,6 +29,7 @@ func (tex *Texture) InitOnce(p *gl.Painter3D) {
 func NewTexture() *Texture {
 	return &Texture{
 		MixParams: 0.2,
+		imgs:      make(map[int]image.Image),
 	}
 }
 func (tex *Texture) Init(p *gl.Painter3D) {
@@ -50,6 +56,14 @@ func (tex *Texture) After(p *gl.Painter3D) {
 func (tex *Texture) AppendPathWithCustomAttr(attr string, p string) {
 	tex.paths = append(tex.paths, p)
 	tex.customAttrs = append(tex.customAttrs, attr)
+}
+
+func (tex *Texture) AppendImageWithCustomAttr(attr string, img image.Image) {
+
+}
+
+func (tex *Texture) AppendImage(p string) {
+
 }
 
 func (tex *Texture) AppendPath(p string) {

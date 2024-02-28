@@ -93,19 +93,27 @@ func (p *painter) drawObject(o fyne.CanvasObject, pos fyne.Position, frame fyne.
 
 func (p *painter) drawCustomObj(o *Canvas3dObjs, pos fyne.Position, frame fyne.Size) {
 	o.RangeCanvas3dObj(func(obj *Canvas3dObj) (stop bool) {
-		vertStr, fragStr := obj.GetShader()
-		if vertStr == "" || fragStr == "" {
-			return
+		needsShader, _ := obj.GetShader()
+		if len(needsShader) > 0 {
+			vertStr, fragStr := obj.GetShader()
+			if vertStr == "" || fragStr == "" {
+				return
+			}
+			if obj.Painter == nil {
+				pa := NewPainter3D(p.ctx)
+				obj.Painter = pa
+			}
+			if !obj.Painter.HasInit() {
+				obj.Painter.prog = p.createProgramWithShader([]byte(vertStr), []byte(fragStr))
+				obj.InitOnce()
+			}
+			p.ctx.UseProgram(obj.Painter.prog)
+		} else {
+			if !obj.Painter.HasInit() {
+				obj.Painter.prog = math.MaxInt32
+				obj.InitOnce()
+			}
 		}
-		if obj.Painter == nil {
-			pa := NewPainter3D(p.ctx)
-			obj.Painter = pa
-		}
-		if !obj.Painter.HasShader() {
-			obj.Painter.prog = p.createProgramWithShader([]byte(vertStr), []byte(fragStr))
-			obj.InitOnce()
-		}
-		p.ctx.UseProgram(obj.Painter.prog)
 		obj.Init()
 		obj.BeforeDraw(pos, frame)
 		obj.Draw(pos, frame)

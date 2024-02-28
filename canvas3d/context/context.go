@@ -58,6 +58,22 @@ type Context interface {
 	MakeTexture(img image.Image, index uint32) Texture
 	MakeVao(points []float32) Buffer
 	MakeVaoWithEbo(points []float32, index []uint32) (Buffer, Buffer)
+
+	ExtFogi(panme uint32, v int32)
+	ExtFogiv(panme uint32, v []int32)
+	ExtFogf(panme uint32, v float32)
+	ExtFogfv(panme uint32, v mgl32.Vec4)
+	ExtBegin(mode uint32)
+	ExtEnd()
+	ExtColor3f(r, g, b float32)
+	ExtColor3fV(vec3 mgl32.Vec3)
+	ExtPointSize(size float32)
+	ExtLineWidth(width float32)
+	ExtFlush()
+	ExtVertex3f(x, y, z float32)
+	ExtVertex3fV(vec3 mgl32.Vec3)
+	ExtColor4ub(r, g, b, a uint8)
+	ExtColor4ubv(v []uint8)
 }
 
 type (
