@@ -22,8 +22,7 @@ type Points struct {
 
 func NewPoint() *Point {
 	return &Point{
-		Pos:   &mgl32.Vec3{},
-		Color: &mgl32.Vec3{},
+		Pos: &mgl32.Vec3{},
 	}
 }
 

@@ -13,7 +13,7 @@ type ICanvas3d interface {
 	AppendDefaultObj(obj gl.Canvas3D)
 	Reset()
 	GetRenderObj() fyne.CanvasObject
-	AppendDefaultRenderFunc(index int, fn func(ctx context.Painter))
+	AppendDefaultRenderFunc(fn func(ctx context.Painter))
 	AppendRenderFunc(index int, fn func(painter context.Painter))
 	fyne.CanvasObject
 }
@@ -41,12 +41,12 @@ func (c *Canvas3d) AppendRenderFunc(index int, fn func(ctx context.Painter)) {
 	obj.RenderFuncs = append(obj.RenderFuncs, fn)
 }
 
-func (c *Canvas3d) AppendDefaultRenderFunc(index int, fn func(ctx context.Painter)) {
-	c.AppendRenderFunc(1, fn)
+func (c *Canvas3d) AppendDefaultRenderFunc(fn func(ctx context.Painter)) {
+	c.AppendRenderFunc(0, fn)
 }
 
 func (c *Canvas3d) AppendDefaultObj(obj gl.Canvas3D) {
-	c.AppendObj(1, obj)
+	c.AppendObj(0, obj)
 }
 
 func (c *Canvas3d) AppendObj(index int, obj gl.Canvas3D) {
