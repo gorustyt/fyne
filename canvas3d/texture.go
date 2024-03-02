@@ -10,8 +10,34 @@ import (
 
 var _ gl.Canvas3D = (*Texture)(nil)
 
+type pathTexture string
+
+func (p pathTexture) Image() image.Image {
+	f, err := os.Open(string(p))
+	if err != nil {
+		panic(err)
+	}
+	defer f.Close()
+	img, _, err := image.Decode(f)
+	if err != nil {
+		panic(err)
+	}
+	return img
+}
+
+type imgTexture struct {
+	img image.Image
+}
+
+func (p imgTexture) Image() image.Image {
+	return p.img
+}
+
+type itexture interface {
+	Image() image.Image
+}
 type Texture struct {
-	paths       []string
+	paths       []itexture
 	tex         []context.Texture
 	customAttrs []string
 	MixParams   float32
@@ -54,39 +80,30 @@ func (tex *Texture) After(p *gl.Painter3D) {
 }
 
 func (tex *Texture) AppendPathWithCustomAttr(attr string, p string) {
-	tex.paths = append(tex.paths, p)
+	tex.AppendPath(p)
 	tex.customAttrs = append(tex.customAttrs, attr)
 }
 
-func (tex *Texture) AppendImageWithCustomAttr(attr string, img image.Image) {
-
+func (tex *Texture) AppendImageWithCustomAttr(attr string, p image.Image) {
+	tex.AppendImage(p)
+	tex.customAttrs = append(tex.customAttrs, attr)
 }
 
-func (tex *Texture) AppendImage(p string) {
-
+func (tex *Texture) AppendImage(p image.Image) {
+	tex.paths = append(tex.paths, &imgTexture{
+		img: p,
+	})
 }
 
 func (tex *Texture) AppendPath(p string) {
-	tex.paths = append(tex.paths, p)
+	tex.paths = append(tex.paths, pathTexture(p))
 }
 
 func (tex *Texture) createTexture(painter *gl.Painter3D) {
-	openFile := func(p string, index int) {
-		f, err := os.Open(p)
-		if err != nil {
-			panic(err)
-		}
-		defer f.Close()
-		img, _, err := image.Decode(f)
-		if err != nil {
-			panic(err)
-		}
-		tex.tex = append(tex.tex, painter.MakeTexture(img, gl.GetTextureByIndex(index)))
-	}
 	for i, v := range tex.paths {
 		if i < len(tex.tex) {
 			continue
 		}
-		openFile(v, i)
+		tex.tex = append(tex.tex, painter.MakeTexture(v.Image(), gl.GetTextureByIndex(i)))
 	}
 }

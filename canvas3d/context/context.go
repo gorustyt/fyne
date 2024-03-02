@@ -74,6 +74,7 @@ type Context interface {
 	ExtVertex3fV(vec3 mgl32.Vec3)
 	ExtColor4ub(r, g, b, a uint8)
 	ExtColor4ubv(v []uint8)
+	ExtHint(target uint32, mode uint32)
 }
 
 type (

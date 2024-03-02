@@ -414,19 +414,24 @@ func (c *coreContext) ExtVertex3fV(vec3 mgl32.Vec3) {
 }
 
 const (
-	LineStrIp = gl.LINE_STRIP
-	LineLoop  = gl.LINE_LOOP
-	Quads     = gl.QUADS
-	Lines     = gl.LINES
-	Points    = gl.POINTS
-	Fog       = gl.FOG
-	FogMode   = gl.FOG_MODE
-	FogStart  = gl.FOG_START
-	FogEnd    = gl.FOG_END
-	FogColor  = gl.FOG_COLOR
-	CullFace  = gl.CULL_FACE
-	Lequal    = gl.LEQUAL
-	Linear    = gl.LINEAR
+	LineStrIp   = gl.LINE_STRIP
+	LineLoop    = gl.LINE_LOOP
+	Quads       = gl.QUADS
+	Lines       = gl.LINES
+	Points      = gl.POINTS
+	Fog         = gl.FOG
+	FogMode     = gl.FOG_MODE
+	FogDensity  = gl.FOG_DENSITY
+	FogHint     = gl.FOG_HINT
+	FogDontCare = gl.DONT_CARE
+	Exp         = gl.EXP
+	Exp2        = gl.EXP2
+	FogStart    = gl.FOG_START
+	FogEnd      = gl.FOG_END
+	FogColor    = gl.FOG_COLOR
+	CullFace    = gl.CULL_FACE
+	Lequal      = gl.LEQUAL
+	Linear      = gl.LINEAR
 )
 
 func (c *coreContext) ExtFogi(panme uint32, v int32) {
@@ -443,4 +448,8 @@ func (c *coreContext) ExtFogf(panme uint32, v float32) {
 
 func (c *coreContext) ExtFogfv(panme uint32, v mgl32.Vec4) {
 	gl.Fogfv(panme, &v[0])
+}
+
+func (c *coreContext) ExtHint(target uint32, mode uint32) {
+	gl.Hint(target, mode)
 }
