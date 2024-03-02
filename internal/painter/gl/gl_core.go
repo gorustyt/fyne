@@ -323,7 +323,7 @@ func (c *coreContext) MakeVao(points []float32) context.Buffer {
 	return context.Buffer(vbo)
 }
 
-func (c *coreContext) MakeTexture(img image.Image, index uint32) context.Texture {
+func (c *coreContext) MakeTexture(img image.Image, index uint32, levelData map[int32][]uint8) context.Texture {
 	rgba := image.NewRGBA(img.Bounds())
 	if rgba.Stride != rgba.Rect.Size().X*4 {
 		panic("unsupported stride")
@@ -338,8 +338,16 @@ func (c *coreContext) MakeTexture(img image.Image, index uint32) context.Texture
 	gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT)
 	gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST)
 	gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST)
-	gl.TexImage2D(gl.TEXTURE_2D, 0, gl.RGBA, int32(rgba.Rect.Size().X), int32(rgba.Rect.Size().Y), 0, gl.RGBA, gl.UNSIGNED_BYTE, gl.Ptr(rgba.Pix))
-	gl.GenerateMipmap(gl.TEXTURE_2D)
+	if len(levelData) > 0 {
+		for k, v := range levelData {
+			gl.TexImage2D(gl.TEXTURE_2D, k, gl.RGBA, int32(rgba.Rect.Size().X), int32(rgba.Rect.Size().Y), 0, gl.RGBA, gl.UNSIGNED_BYTE, gl.Ptr(v))
+		}
+	} else {
+		gl.TexImage2D(gl.TEXTURE_2D, 0, gl.RGBA, int32(rgba.Rect.Size().X), int32(rgba.Rect.Size().Y), 0, gl.RGBA, gl.UNSIGNED_BYTE, gl.Ptr(rgba.Pix))
+	}
+	if len(levelData) == 0 {
+		gl.GenerateMipmap(gl.TEXTURE_2D)
+	}
 	return context.Texture(te)
 }
 
