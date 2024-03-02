@@ -55,7 +55,8 @@ type Context interface {
 	EnableDepthTest()
 
 	DrawElementsArrays(mode uint32, index []uint32)
-	MakeTexture(img image.Image, index uint32, levelData map[int32][]uint8) Texture
+	MakeTexture(img image.Image, index uint32) Texture
+	MakeLevelTexture(index uint32, size int32, levelData map[int32][]uint32) Texture
 	MakeVao(points []float32) Buffer
 	MakeVaoWithEbo(points []float32, index []uint32) (Buffer, Buffer)
 
