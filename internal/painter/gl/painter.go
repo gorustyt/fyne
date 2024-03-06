@@ -129,7 +129,7 @@ func (p *painter) compileShader(source string, shaderType uint32) (context.Shade
 	p.logError()
 
 	info := p.ctx.GetShaderInfoLog(shader)
-	if p.ctx.GetShaderi(shader, compileStatus) == glFalse {
+	if p.ctx.GetShaderi(shader, compileStatus) == GlFalse {
 		return noShader, fmt.Errorf("failed to compile OpenGL shader:\n%s\n>>> SHADER SOURCE\n%s\n<<< SHADER SOURCE", info, source)
 	}
 
@@ -157,7 +157,7 @@ func (p *painter) createProgramWithShader(vertexSrc, fragmentSrc []byte) context
 	p.ctx.LinkProgram(prog)
 
 	info := p.ctx.GetProgramInfoLog(prog)
-	if p.ctx.GetProgrami(prog, linkStatus) == glFalse {
+	if p.ctx.GetProgrami(prog, linkStatus) == GlFalse {
 		panic(fmt.Errorf("failed to link OpenGL program:\n%s", info))
 	}
 

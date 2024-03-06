@@ -48,7 +48,7 @@ func (p *painter) imgToTexture(img image.Image, textureFilter canvas.ImageScale)
 		r8, g8, b8, a8 := uint8(r>>8), uint8(g>>8), uint8(b>>8), uint8(a>>8)
 		data := []uint8{r8, g8, b8, a8}
 		p.ctx.TexImage2D(
-			texture2D,
+			Texture2D,
 			0,
 			1,
 			1,
@@ -65,7 +65,7 @@ func (p *painter) imgToTexture(img image.Image, textureFilter canvas.ImageScale)
 
 		texture := p.newTexture(textureFilter)
 		p.ctx.TexImage2D(
-			texture2D,
+			Texture2D,
 			0,
 			i.Rect.Size().X,
 			i.Rect.Size().Y,
@@ -164,12 +164,12 @@ func (p *painter) newTexture(textureFilter canvas.ImageScale) context.Texture {
 	texture := p.ctx.CreateTexture()
 	p.logError()
 	p.ctx.ActiveTexture(texture0)
-	p.ctx.BindTexture(texture2D, texture)
+	p.ctx.BindTexture(Texture2D, texture)
 	p.logError()
-	p.ctx.TexParameteri(texture2D, textureMinFilter, textureFilterToGL[textureFilter])
-	p.ctx.TexParameteri(texture2D, textureMagFilter, textureFilterToGL[textureFilter])
-	p.ctx.TexParameteri(texture2D, textureWrapS, clampToEdge)
-	p.ctx.TexParameteri(texture2D, textureWrapT, clampToEdge)
+	p.ctx.TexParameteri(Texture2D, TextureMinFilter, textureFilterToGL[textureFilter])
+	p.ctx.TexParameteri(Texture2D, TextureMagFilter, textureFilterToGL[textureFilter])
+	p.ctx.TexParameteri(Texture2D, textureWrapS, clampToEdge)
+	p.ctx.TexParameteri(Texture2D, textureWrapT, clampToEdge)
 	p.logError()
 
 	return texture

@@ -254,7 +254,7 @@ func (p *painter) drawTextureWithDetails(o fyne.CanvasObject, creator func(canva
 	p.logError()
 
 	p.ctx.ActiveTexture(texture0)
-	p.ctx.BindTexture(texture2D, texture)
+	p.ctx.BindTexture(Texture2D, texture)
 	p.logError()
 
 	p.ctx.DrawArrays(triangleStrip, 0, 4)

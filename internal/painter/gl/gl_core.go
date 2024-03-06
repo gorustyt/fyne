@@ -26,7 +26,8 @@ const (
 	float                 = gl.FLOAT
 	fragmentShader        = gl.FRAGMENT_SHADER
 	front                 = gl.FRONT
-	glFalse               = gl.FALSE
+	GlFalse               = gl.FALSE
+	GlTrue                = gl.TRUE
 	linkStatus            = gl.LINK_STATUS
 	one                   = gl.ONE
 	oneMinusConstantAlpha = gl.ONE_MINUS_CONSTANT_ALPHA
@@ -35,15 +36,18 @@ const (
 	srcAlpha              = gl.SRC_ALPHA
 	staticDraw            = gl.STATIC_DRAW
 	texture0              = gl.TEXTURE0
-	texture2D             = gl.TEXTURE_2D
-	textureMinFilter      = gl.TEXTURE_MIN_FILTER
-	textureMagFilter      = gl.TEXTURE_MAG_FILTER
+	Texture2D             = gl.TEXTURE_2D
+	TextureMinFilter      = gl.TEXTURE_MIN_FILTER
+	TextureMagFilter      = gl.TEXTURE_MAG_FILTER
 	textureWrapS          = gl.TEXTURE_WRAP_S
 	textureWrapT          = gl.TEXTURE_WRAP_T
 	Triangles             = gl.TRIANGLES
 	triangleStrip         = gl.TRIANGLE_STRIP
 	unsignedByte          = gl.UNSIGNED_BYTE
 	vertexShader          = gl.VERTEX_SHADER
+	GlRgba                = gl.RGBA
+	GlUnsigedBytes        = gl.UNSIGNED_BYTE
+	LinearMipMapNearest   = gl.LINEAR_MIPMAP_NEAREST
 )
 
 const noBuffer = context.Buffer(0)

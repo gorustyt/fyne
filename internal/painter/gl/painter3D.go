@@ -38,7 +38,7 @@ func (p *Painter3D) DefineVertexArray(name string, size, stride, offset int) {
 }
 
 func (p *Painter3D) BindTexture(texture context.Texture) {
-	p.Context.BindTexture(texture2D, texture)
+	p.Context.BindTexture(Texture2D, texture)
 }
 
 func (p *Painter3D) UniformMatrix4fv(name string, mat4 mgl32.Mat4) {
