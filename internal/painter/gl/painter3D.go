@@ -24,11 +24,11 @@ func (p *Painter3D) HasInit() bool {
 }
 
 func (p *Painter3D) DrawTrianglesByElement(index []uint32) {
-	p.Context.DrawElementsArrays(triangles, index)
+	p.Context.DrawElementsArrays(Triangles, index)
 }
 
 func (p *Painter3D) DrawTriangles(count int) {
-	p.Context.DrawArrays(triangles, 0, count)
+	p.Context.DrawArrays(Triangles, 0, count)
 }
 
 func (p *Painter3D) DefineVertexArray(name string, size, stride, offset int) {

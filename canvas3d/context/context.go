@@ -76,6 +76,18 @@ type Context interface {
 	ExtColor4ub(r, g, b, a uint8)
 	ExtColor4ubv(v []uint8)
 	ExtHint(target uint32, mode uint32)
+	ExtDepthMask(flag bool)
+	ExtVertex3fv(vec mgl32.Vec3)
+	ExtTexCoord2fv(vec mgl32.Vec2)
+	//ExtOrtho2D(left, right, bottom, top float64)
+	//ExtLoadIdentity()
+	//ExtGetIntegerv(pname uint32, data []int32)
+	//ExtMatrixMode(mode uint32)
+	//ExtRotatef(angle float32, x float32, y float32, z float32)
+	//ExtTranslatef(x float32, y float32, z float32)
+	//ExtGetDoublev(pname uint32, data []float64)
+	//ExtProject(x, y, z float64, model, project mgl64.Mat4, initialX, initialY, width, height int) mgl64.Vec3
+	//ExtUnProject(x, y, z float64, model, project mgl64.Mat4, initialX, initialY, width, height int) (mgl64.Vec3, error)
 }
 
 type (

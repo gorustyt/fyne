@@ -63,7 +63,7 @@ func (p *painter) drawLine(line *canvas.Line, pos fyne.Position, frame fyne.Size
 	featherUniform := p.ctx.GetUniformLocation(p.lineProgram, "feather")
 	p.ctx.Uniform1f(featherUniform, feather)
 
-	p.ctx.DrawArrays(triangles, 0, 6)
+	p.ctx.DrawArrays(Triangles, 0, 6)
 	p.logError()
 	p.freeBuffer(vbo)
 }

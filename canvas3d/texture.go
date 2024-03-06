@@ -43,7 +43,7 @@ type Texture struct {
 	MixParams     float32
 	imgs          map[int]image.Image
 	levelData     map[int]map[int32][]uint32
-	levelDataSize int32
+	LevelDataSize int32
 }
 
 func (tex *Texture) NeedShader() bool {
@@ -107,7 +107,7 @@ func (tex *Texture) SetDefaultLevelData(level int32, data []uint32) {
 
 func (tex *Texture) SetLevelData(index int, level int32, data []uint32) {
 	v, ok := tex.levelData[index]
-	if ok {
+	if !ok {
 		v = map[int32][]uint32{}
 		tex.levelData[index] = v
 	}
@@ -115,12 +115,12 @@ func (tex *Texture) SetLevelData(index int, level int32, data []uint32) {
 }
 
 func (tex *Texture) createTexture(painter *gl.Painter3D) {
+	if len(tex.levelData) > 0 {
+		tex.tex = append(tex.tex, painter.MakeLevelTexture(gl.GetTextureByIndex(0), tex.LevelDataSize, tex.levelData[0]))
+		return
+	}
 	for i, v := range tex.paths {
 		if i < len(tex.tex) {
-			continue
-		}
-		if i == 0 && len(tex.levelData) > 0 {
-			painter.MakeLevelTexture(gl.GetTextureByIndex(i), tex.levelDataSize, tex.levelData[i])
 			continue
 		}
 		tex.tex = append(tex.tex, painter.MakeTexture(v.Image(), gl.GetTextureByIndex(i)))

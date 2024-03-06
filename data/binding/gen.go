@@ -939,7 +939,7 @@ import (
 	"github.com/gorustyt/fyne/v2"
 )
 
-const keyTypeMismatchError = "A previous preference binding exists with different type for key: "
+enum keyTypeMismatchError = "A previous preference binding exists with different type for key: "
 `)
 
 	listFile, err := newFile("bindlists")

@@ -56,10 +56,13 @@ func main() {
 	fog.End = 5
 	fog.Density = 0.35
 	fog.Colorf = mgl32.Vec4{0.0, 0.8, 0.0, 1.0}
+
 	c := canvas3d_render.NewCanvas3d()
+
 	c.AppendDefaultObj(points)
 	c.AppendDefaultObj(lines)
 	c.AppendDefaultObj(fog)
+
 	w.SetContent(c.GetRenderObj())
 	w.Resize(fyne.NewSize(800, 600))
 	a.Settings().SetTheme(theme.DarkTheme())

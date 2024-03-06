@@ -40,7 +40,7 @@ const (
 	textureMagFilter      = gl.TEXTURE_MAG_FILTER
 	textureWrapS          = gl.TEXTURE_WRAP_S
 	textureWrapT          = gl.TEXTURE_WRAP_T
-	triangles             = gl.TRIANGLES
+	Triangles             = gl.TRIANGLES
 	triangleStrip         = gl.TRIANGLE_STRIP
 	unsignedByte          = gl.UNSIGNED_BYTE
 	vertexShader          = gl.VERTEX_SHADER
@@ -467,3 +467,48 @@ func (c *coreContext) ExtFogfv(panme uint32, v mgl32.Vec4) {
 func (c *coreContext) ExtHint(target uint32, mode uint32) {
 	gl.Hint(target, mode)
 }
+
+func (c *coreContext) ExtDepthMask(flag bool) {
+	gl.DepthMask(flag)
+}
+
+func (c *coreContext) ExtVertex3fv(vec mgl32.Vec3) {
+	gl.Vertex3fv(&vec[0])
+}
+
+func (c *coreContext) ExtTexCoord2fv(vec mgl32.Vec2) {
+	gl.TexCoord2fv(&vec[0])
+}
+
+//func (c *coreContext) ExtGetIntegerv(pname uint32, data []int32) {
+//	gl.GetIntegerv(pname, &data[0])
+//}
+//
+//func (c *coreContext) ExtMatrixMode(mode uint32) {
+//	gl.MatrixMode(mode)
+//}
+//
+//func (c *coreContext) ExtRotatef(angle float32, x float32, y float32, z float32) {
+//	gl.Rotatef(angle, x, y, z)
+//}
+//func (c *coreContext) ExtTranslatef(x float32, y float32, z float32) {
+//	gl.Translatef(x, y, z)
+//}
+//func (c *coreContext) ExtGetDoublev(pname uint32, data []float64) {
+//	gl.GetDoublev(pname, &data[0])
+//}
+//
+//func (c *coreContext) ExtProject(x, y, z float64, model, project mgl64.Mat4, initialX, initialY, width, height int) mgl64.Vec3 {
+//	return mgl64.Project(mgl64.Vec3{x, y, z}, model, project, initialX, initialY, width, height)
+//}
+//func (c *coreContext) ExtUnProject(x, y, z float64, model, project mgl64.Mat4, initialX, initialY, width, height int) (mgl64.Vec3, error) {
+//	return mgl64.UnProject(mgl64.Vec3{x, y, z}, model, project, initialX, initialY, width, height)
+//}
+//
+//func (c *coreContext) ExtLoadIdentity() {
+//	gl.LoadIdentity()
+//}
+//
+//func (c *coreContext) ExtOrtho2D(left, right, bottom, top float64) {
+//	gl.Ortho(left, right, bottom, top, -1, 1)
+//}
