@@ -487,6 +487,10 @@ func (c *coreContext) ExtTexCoord2fv(vec mgl32.Vec2) {
 	gl.TexCoord2fv(&vec[0])
 }
 
+func (c *coreContext) Vertex2f(x, y float32) {
+	gl.Vertex2f(x, y)
+}
+
 //func (c *coreContext) ExtGetIntegerv(pname uint32, data []int32) {
 //	gl.GetIntegerv(pname, &data[0])
 //}
