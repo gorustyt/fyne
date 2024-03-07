@@ -7,6 +7,7 @@ import (
 )
 
 type Context interface {
+	GenTextures(n int32, textures *uint32)
 	ActiveTexture(textureUnit uint32)
 	AttachShader(program Program, shader Shader)
 	BindBuffer(target uint32, buf Buffer)

@@ -460,6 +460,9 @@ func (c *coreContext) ExtFogiv(panme uint32, v []int32) {
 	gl.Fogiv(panme, &v[0])
 }
 
+func (c *coreContext) GenTextures(n int32, textures *uint32) {
+	gl.GenTextures(n, textures)
+}
 func (c *coreContext) ExtFogf(panme uint32, v float32) {
 	gl.Fogf(panme, v)
 }
