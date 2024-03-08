@@ -80,7 +80,7 @@ type Context interface {
 	ExtDepthMask(flag bool)
 	ExtVertex3fv(vec mgl32.Vec3)
 	ExtTexCoord2fv(vec mgl32.Vec2)
-	Vertex2f(x, y float32)
+	ExtVertex2f(x, y float32)
 	//ExtOrtho2D(left, right, bottom, top float64)
 	//ExtLoadIdentity()
 	//ExtGetIntegerv(pname uint32, data []int32)

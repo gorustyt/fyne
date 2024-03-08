@@ -18,7 +18,9 @@ func NewPainter3D(ctx context.Context) *Painter3D {
 
 	return &Painter3D{Context: ctx}
 }
-
+func (p *Painter3D) GetContext() context.Context {
+	return p.Context
+}
 func (p *Painter3D) HasInit() bool {
 	return p.prog != 0
 }

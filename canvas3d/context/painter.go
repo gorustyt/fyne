@@ -6,6 +6,7 @@ import (
 )
 
 type Painter interface {
+	GetContext() Context
 	UniformMatrix4fv(name string, mat4 mgl32.Mat4)
 	Uniform1i(name string, v0 int32)
 
